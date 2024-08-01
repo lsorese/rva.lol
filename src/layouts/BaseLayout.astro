@@ -1,0 +1,48 @@
+---
+// src/layouts/BaseLayout.astro
+import "../styles/styles.css";
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title || 'My Astro Site'}</title>
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to My Site</h1>
+      <button id="theme-toggle" aria-label="Toggle dark mode">Toggle Dark Mode</button>
+    </header>
+    <main class="container">
+      <slot />
+    </main>
+    <footer>
+      <p>&copy; 2024 My Astro Site</p>
+    </footer>
+
+    <!-- Client-side script for theme toggling -->
+    <script>
+      if (typeof document !== 'undefined') {
+        (function() {
+          function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+          }
+
+          function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+          }
+
+          document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+          initializeTheme();
+        })();
+      }
+    </script>
+  </body>
+</html>

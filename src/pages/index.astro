@@ -1,0 +1,54 @@
+---
+// src/pages/index.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCalendarEvents } from '../lib/calendar';
+import { parseRRule } from '../lib/rruleParser';
+
+const events = await getCalendarEvents();
+
+function generateGoogleMapsLink(location) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+}
+
+function stripHtml(html) {
+  return html.replace(/<\/?[^>]+(>|$)/g, "");
+}
+
+function formatDate(dateString) {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
+function isToday(dateString) {
+  const eventDate = new Date(dateString);
+  const today = new Date();
+  return (
+    eventDate.getDate() === today.getDate() &&
+    eventDate.getMonth() === today.getMonth() &&
+    eventDate.getFullYear() === today.getFullYear()
+  );
+}
+---
+
+<BaseLayout title="Upcoming Events">
+  {events.map((event) => (
+    <div 
+      key={event.id} 
+      class={isToday(event.start.dateTime || event.start.date) ? 'today-event' : ''}
+    >
+      <h2>{event.summary}</h2>
+      <p><strong>Date:</strong> {formatDate(event.start.dateTime || event.start.date)}</p>
+      {isToday(event.start.dateTime || event.start.date) && <p><strong>Note:</strong> This event is happening today!</p>}
+      <p>{stripHtml(event.description || '')}</p>
+      {event.recurrence && (
+        <p><strong>Recurrence:</strong> {event.recurrence.map(rrule => parseRRule(rrule)).join(', ')}</p>
+      )}
+      {event.location && (
+        <p>
+          <strong>Location:</strong> {event.location} 
+          <a href={generateGoogleMapsLink(event.location)} target="_blank" rel="noopener noreferrer"> (View on Google Maps)</a>
+        </p>
+      )}
+    </div>
+  ))}
+</BaseLayout>

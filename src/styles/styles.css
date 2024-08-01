@@ -1,0 +1,89 @@
+:root {
+  --background-color: #f2f2f2; /* Light gray background for light mode */
+  --text-color: #000000; /* Black text color */
+  --header-footer-bg: #e0e0e0; /* Slightly darker gray for header/footer */
+  --header-footer-text: #000000; /* Black text for header/footer */
+  --border-color: #680f66; /* Light green border */
+}
+
+[data-theme='dark'] {
+  --background-color: #1c1c1c; /* Dark gray background for dark mode */
+  --text-color: #33ff33; /* Light green text color */
+  --header-footer-bg: #2a2a2a; /* Slightly lighter gray for header/footer */
+  --header-footer-text: #33ff33; /* Light green text for header/footer */
+  --border-color: #33ff33; /* Light green border */
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Courier New', Courier, monospace; /* Monospaced font */
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* Focus styles */
+button:focus,
+a:focus {
+  outline: 2px dashed #333; /* Visible focus outline */
+  outline-offset: 4px;
+}
+
+/* High contrast for text */
+body {
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+/* For hover and focus states */
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 800px;
+  margin: 40px auto; /* Margin for spacing */
+  padding: 20px;
+  background-color: var(--header-footer-bg);
+  border: 2px solid var(--border-color);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Darker shadow for contrast */
+  text-align: left;
+}
+
+header, footer {
+  background-color: var(--header-footer-bg);
+  color: var(--header-footer-text);
+  padding: 15px 0;
+}
+
+h1, h2 {
+  color: var(--border-color);
+}
+
+a {
+  color: #0000ff; /* Blue links for contrast */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+ul {
+  list-style-type: square;
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+.today-event {
+  background-color: #ffefc1; /* Light yellow background */
+  border: 2px solid #ffc107; /* Gold border */
+  padding: 15px;
+  border-radius: 5px; /* Slightly rounded corners */
+  margin-bottom: 15px; /* Space between events */
+}
