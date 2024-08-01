@@ -33,12 +33,13 @@ function isToday(dateString) {
 <BaseLayout title="Upcoming Events">
   {events.map((event) => (
     <div 
+      data-event
       key={event.id} 
       class={isToday(event.start.dateTime || event.start.date) ? 'today-event' : ''}
     >
+      {isToday(event.start.dateTime || event.start.date) && <div class="today">TODAY!</div>}
       <h2>{event.summary}</h2>
       <p><strong>Date:</strong> {formatDate(event.start.dateTime || event.start.date)}</p>
-      {isToday(event.start.dateTime || event.start.date) && <p><strong>Note:</strong> This event is happening today!</p>}
       <p>{stripHtml(event.description || '')}</p>
       {event.recurrence && (
         <p><strong>Recurrence:</strong> {event.recurrence.map(rrule => parseRRule(rrule)).join(', ')}</p>

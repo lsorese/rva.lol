@@ -3,39 +3,48 @@
   --text-color: #000000;
   --header-footer-bg: #e0e0e0;
   --header-footer-text: #000000;
-  --border-color: #33ff33;
+  --border-color: #000;
+  --heading-color: #000;
+  --today-event-bg: #ffefc1;
+  --today-event-border: #ffc107;
+  --today-event-text-color: #000;
+  --a: rgb(27, 13, 220);
 }
-
 
 body {
   background-color: var(--background-color);
   color: var(--text-color);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   margin: 0;
   padding: 0;
   text-align: center;
 }
 
-
-[data-theme='dark'] {
+[data-theme="dark"] {
   --background-color: #1c1c1c;
-  --text-color: #000000;
+  --text-color: #ffffff;
   --header-footer-bg: #2a2a2a;
-  --header-footer-text: #33ff33;
-  --border-color: #33ff33;
+  --header-footer-text: #000;
+  --heading-color: #aec39f;
+  --border-color: #999999;
+  --today-event-bg: #111;
+  --today-event-border: #222;
+  --today-event-text-color: #fff;
+  --a: #ffc107;
 }
 
 .container {
   max-width: 800px;
   margin: 40px auto;
-  padding: 20px;
+  padding: 0;
   background-color: var(--header-footer-bg);
   border: 2px solid var(--border-color);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   text-align: left;
 }
 
-header, footer {
+header,
+footer {
   background-color: var(--header-footer-bg);
   color: var(--header-footer-text);
   padding: 15px 0;
@@ -47,6 +56,7 @@ nav {
     padding: 0;
     display: flex;
     gap: 15px;
+    justify-content: center;
   }
 
   ul li {
@@ -65,12 +75,19 @@ nav {
   }
 }
 
-h1, h2 {
-  color: var(--border-color);
+h1,
+h2 {
+  color: var(--heading-color);
+  margin-top: 0;
+}
+
+p:last-of-type {
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 a {
-  color: #0000ff;
+  color: var(--a);
   text-decoration: none;
 
   &:hover {
@@ -88,9 +105,23 @@ li {
 }
 
 .today-event {
-  background-color: #ffefc1;
-  border: 2px solid #ffc107;
+  background-color: var(--today-event-bg);
+  //border: 2px solid var(--today-event-border);
+  color: var(--today-event-text-color);
   padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 15px;
+}
+
+[data-event] {
+  position: relative;
+  padding: 20px;
+  border-bottom: 2px solid #000;
+
+  .today {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: var(--text-color);
+    font-weight: bold;
+    font-size: 20px;
+  }
 }
