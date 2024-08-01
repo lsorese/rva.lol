@@ -1,6 +1,7 @@
 :root {
   --background-color: #f2f2f2;
   --text-color: #000000;
+  --inverse-text-color: #000000;
   --header-footer-bg: #e0e0e0;
   --header-footer-text: #000000;
   --border-color: #000;
@@ -23,6 +24,7 @@ body {
 [data-theme="dark"] {
   --background-color: #1c1c1c;
   --text-color: #ffffff;
+  --inverse-text-color: #000000;
   --header-footer-bg: #2a2a2a;
   --header-footer-text: #000;
   --heading-color: #aec39f;
@@ -47,6 +49,13 @@ header,
 footer {
   color: var(--header-footer-text);
   padding: 15px 0;
+  * {
+    color: var(--text-color);
+  }
+  button {
+    margin-top: 10px;
+    color: var(--inverse-text-color);
+  }
 }
 
 nav {
@@ -117,8 +126,12 @@ li {
 
   .today {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: -14px;
+    right: -14px;
+    background: var(--background-color);
+    padding: 4px 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
     color: var(--text-color);
     font-weight: bold;
     font-size: 20px;

@@ -20,13 +20,13 @@ const { title } = Astro.props;
           <li><a href="/about">About</a></li>
         </ul>
       </nav>
-      <button id="theme-toggle" aria-label="Toggle dark mode">Toggle Dark Mode</button>
     </header>
     <main class="container">
       <slot />
     </main>
     <footer>
       <p>By Logan, from the Internet<br /><a href="https://github.com/lsorese/rva.lol" target="_blank">Open Source</a></p>
+      <button id="theme-toggle" aria-label="Toggle dark mode">Toggle Dark Mode</button>
     </footer>
     <script>
       if (typeof document !== 'undefined') {
