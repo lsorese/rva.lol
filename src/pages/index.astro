@@ -18,16 +18,17 @@ const events = await getCalendarEvents('b3d8d5b621d0840f0266cfbcfaaaeb06986e1359
         class={isToday(eventStart) ? 'today-event' : ''}
       >
         {isToday(eventStart) && <div class="today">TODAY!</div>}
-        <h2>{event.summary}<br /><small>{formatDate(eventStart)}</small></h2>
-        {event.recurrence && (
-          <h3>{capitalizeFirstLetter(event.recurrence.map(rrule => formatRecurrence(rrule)).join(', '))}
-          </h3>
-        )}
+        <h2>{event.summary}<br />{event.recurrence && (
+          <small>{capitalizeFirstLetter(event.recurrence.map(rrule => formatRecurrence(rrule)).join(', '))}
+          </small>
+        )}</h2>
+        <h3>{formatDate(eventStart)}</h3>
+        
         <p><strong>Info:</strong><br /><span set:html={decodeHtml(event.description || '')}></span></p>
 
         {event.location && (
           <p>
-            <strong>Location:</strong> {event.location}<br />
+            <strong>Location:</strong><br /> {event.location}<br />
             <a href={generateGoogleMapsLink(event.location)} target="_blank" rel="noopener noreferrer">(View on Google Maps) -></a>
           </p>
         )}
