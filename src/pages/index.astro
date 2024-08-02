@@ -5,6 +5,16 @@ import { getCalendarEvents } from '../lib/calendar';
 import { parseRRule } from '../lib/rruleParser';
 import he from 'he';
 
+export async function getStaticPaths() {
+  const events = await getCalendarEvents();
+
+  return {
+    paths: events.map(event => ({ params: { id: event.id } })),
+    fallback: 'blocking', // Blocking fallback for ISR
+    revalidate: 60, // Revalidate every 60 seconds
+  };
+}
+
 const events = await getCalendarEvents();
 
 function generateGoogleMapsLink(location) {
@@ -40,11 +50,12 @@ function isToday(dateString) {
     >
       {isToday(event.start.dateTime || event.start.date) && <div class="today">TODAY!</div>}
       <h2>{event.summary}</h2>
-      <p set:html={event.description}></p>
+      <p set:html={decodeHtml(event.description || '')}></p>
       {event.recurrence && (
         <p><strong>Recurrence:</strong> {event.recurrence.map(rrule => parseRRule(rrule)).join(', ')}</p>
       )}
       <p><strong>Next Date:</strong> {formatDate(event.start.dateTime || event.start.date)}</p>
+
       {event.location && (
         <p>
           <strong>Location:</strong> {event.location} 
