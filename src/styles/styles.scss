@@ -6,7 +6,7 @@
   --header-footer-text: #000000;
   --border-color: #000;
   --heading-color: #000;
-  --today-event-bg: #ffefc1;
+  --today-event-bg: #efd4ea;
   --today-event-border: #ffc107;
   --today-event-text-color: #000;
   --a: rgb(27, 13, 220);
@@ -186,6 +186,9 @@ li {
   background-color: var(--today-event-bg);
   color: var(--today-event-text-color);
   padding: 15px;
+  position: relative;
+  margin-top: 40px;
+  padding-top: 20px;
 }
 
 [data-event] {
@@ -196,21 +199,24 @@ li {
 
 [data-event] .today {
   position: absolute;
-  top: -14px;
-  right: -14px;
-  background: var(--background-color);
-  padding: 4px 10px;
-  border-radius: 10px;
+  top: -25px;
+  left: 0px;
+  height: 30px;
+  line-height: 30px;
+  background-color: var(--today-event-bg);
+  padding: 4px 15px;
   color: var(--text-color);
   font-weight: bold;
   font-size: 20px;
+  border-radius: 2px;
 }
 
 [data-add] {
   margin-bottom: 20px;
   display: block;
   font-size: 12px;
-  border-bottom: 1px solid #aaa;
+  margin-bottom: 30px;
+  border-bottom: 4px solid #666;
   text-align: center;
   margin-top: -5px;
   padding-bottom: 10px;
