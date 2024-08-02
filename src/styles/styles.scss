@@ -15,8 +15,9 @@
 body {
   background-color: var(--background-color);
   color: var(--text-color);
-  font-family: "Courier New", Courier, monospace;
-  margin: 0;
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
   padding: 0 20px;
   text-align: center;
 }
@@ -39,9 +40,6 @@ body {
   max-width: 800px;
   margin: 40px auto;
   padding: 0;
-  background-color: var(--header-footer-bg);
-  border: 2px solid var(--border-color);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   text-align: left;
 }
 
@@ -122,7 +120,10 @@ li {
 [data-event] {
   position: relative;
   padding: 20px;
-  border-bottom: 2px solid #000;
+  border: 6px solid #264CDF;
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 0.75em 0.75em 0px 0em #264CDF;
+  margin-bottom: 40px; 
 
   .today {
     position: absolute;
@@ -130,7 +131,6 @@ li {
     right: -14px;
     background: var(--background-color);
     padding: 4px 10px;
-    border: 2px solid var(--border-color);
     border-radius: 10px;
     color: var(--text-color);
     font-weight: bold;

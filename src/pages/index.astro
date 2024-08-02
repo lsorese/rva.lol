@@ -63,10 +63,9 @@ function capitalizeFirstLetter(string) {
         class={isToday(eventStart) ? 'today-event' : ''}
       >
         {isToday(eventStart) && <div class="today">TODAY!</div>}
-        <h2>{event.summary}</h2>
+        <h2>{event.summary}<br /><small>{formatDate(eventStart)}</small></h2>
         {event.recurrence && (
-          <h3>{formatDate(eventStart)}: 
-            {capitalizeFirstLetter(event.recurrence.map(rrule => formatRecurrence(rrule)).join(', '))}
+          <h3>{capitalizeFirstLetter(event.recurrence.map(rrule => formatRecurrence(rrule)).join(', '))}
           </h3>
         )}
         <p set:html={decodeHtml(event.description || '')}></p>
