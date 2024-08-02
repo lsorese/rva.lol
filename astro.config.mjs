@@ -8,7 +8,7 @@ export default defineConfig({
             // A secret random string that you create.
             bypassToken: import.meta.env.ISR,
             // Paths that will always be served fresh.
-            exclude: [ "/index.astro", "showcases.astro", "/showcases"]
+            exclude: ["/", "/showcases" ]
         }
     })
 })
