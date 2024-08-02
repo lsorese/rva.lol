@@ -3,6 +3,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCalendarEvents } from '../lib/calendar';
 import { parseRRule } from '../lib/rruleParser';
+import he from 'he';
 
 const events = await getCalendarEvents();
 
@@ -10,8 +11,8 @@ function generateGoogleMapsLink(location) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
 }
 
-function stripHtml(html) {
-  return html.replace(/<\/?[^>]+(>|$)/g, "");
+function decodeHtml(html) {
+  return he.decode(html);
 }
 
 function formatDate(dateString) {
@@ -39,11 +40,11 @@ function isToday(dateString) {
     >
       {isToday(event.start.dateTime || event.start.date) && <div class="today">TODAY!</div>}
       <h2>{event.summary}</h2>
-      <p><strong>Date:</strong> {formatDate(event.start.dateTime || event.start.date)}</p>
-      <p>{stripHtml(event.description || '')}</p>
+      <p set:html={event.description}></p>
       {event.recurrence && (
         <p><strong>Recurrence:</strong> {event.recurrence.map(rrule => parseRRule(rrule)).join(', ')}</p>
       )}
+      <p><strong>Next Date:</strong> {formatDate(event.start.dateTime || event.start.date)}</p>
       {event.location && (
         <p>
           <strong>Location:</strong> {event.location} 
