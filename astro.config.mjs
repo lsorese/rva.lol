@@ -6,7 +6,7 @@ export default defineConfig({
     adapter: vercel({
         isr: {
             // A secret random string that you create.
-            bypassToken: import.meta.env.ISR,
+            bypassToken: "666666666hailsatanlordofdarkness666666666",
             // Paths that will always be served fresh.
             exclude: [ "/index.astro", "showcases.astro", "/showcases"]
         }
