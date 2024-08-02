@@ -34,7 +34,7 @@ body {
   --inverse-text-color: #000000;
   --header-footer-bg: #2a2a2a;
   --header-footer-text: #000;
-  --heading-color: #aec39f;
+  --heading-color: #dbe3d5;
   --border-color: #999999;
   --today-event-bg: #111;
   --today-event-border: #222;
@@ -43,7 +43,7 @@ body {
 }
 
 .container {
-  max-width: 800px;
+  max-width: 666px;
   margin: auto;
   padding: 0;
   text-align: left;
@@ -53,50 +53,64 @@ header,
 footer {
   color: var(--header-footer-text);
   padding: 15px 0;
-  * {
-    color: var(--text-color);
-  }
-  button {
-    margin-top: 10px;
-    color: var(--inverse-text-color);
+}
+
+header * {
+  color: var(--text-color);
+}
+
+header button {
+  margin-top: 10px;
+  color: var(--inverse-text-color);
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 0 15px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+@media only screen and (min-width: 720px) {
+  nav ul {
+    justify-content: center;
   }
 }
 
-nav {
-  ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-  }
+nav ul li {
+  position: relative;
+  padding: 0 5px;
+  margin: 0;
+}
 
-  ul li {
-    position: relative;
-    padding: 0 5px; // Adjust space between items
-    
-    &::before {
-      content: "|"; // The separator
-      position: absolute;
-      opacity: .6;
-      left: -12.5px; // Adjusts position of the separator
-    }
-  
-    &:first-child::before {
-      content: ""; // Removes the separator before the first item
-    }
-  }
+nav ul li:first-child {
+  margin: 0;
+  padding: 0;
+}
 
-  a {
-    color: var(--text-color);
-    text-decoration: none;
-    font-weight: bold;
+nav ul li::before {
+  content: "|";
+  position: absolute;
+  opacity: 0.6;
+  left: -12.5px;
+  color: #ccc;
+}
 
-    &:hover,
-    &:focus {
-      text-decoration: underline;
-    }
-  }
+nav ul li:first-child::before {
+  content: "";
+}
+
+nav a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover,
+nav a:focus {
+  text-decoration: underline;
 }
 
 p {
@@ -118,24 +132,31 @@ h1 {
 
 [data-lol] {
   margin-bottom: 20px;
+  text-align: left;
+}
+
+@media only screen and (min-width: 720px) {
+  [data-lol] {
+    text-align: center;
+  }
 }
 
 h2 {
   font-size: 24px;
   line-height: 28px;
   margin-bottom: 0;
-  display: block; ;
-  small {
-    display: block;
-    margin-bottom: 6px;
-  }
+}
+
+h2 small {
+  display: block;
+  margin-bottom: 6px;
 }
 
 h3 {
-  padding:0;
+  padding: 0;
   margin: 0;
   display: block;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 p:last-of-type {
@@ -146,10 +167,10 @@ p:last-of-type {
 a {
   color: var(--a);
   text-decoration: none;
+}
 
-  &:hover {
-    text-decoration: underline;
-  }
+a:hover {
+  text-decoration: underline;
 }
 
 ul {
@@ -163,33 +184,32 @@ li {
 
 .today-event {
   background-color: var(--today-event-bg);
-  //border: 2px solid var(--today-event-border);
   color: var(--today-event-text-color);
   padding: 15px;
 }
 
 [data-event] {
   border-bottom: 4px dotted #aaa;
-  padding-bottom:20px;
+  padding-bottom: 20px;
   margin-bottom: 40px;
+}
 
-  .today {
-    position: absolute;
-    top: -14px;
-    right: -14px;
-    background: var(--background-color);
-    padding: 4px 10px;
-    border-radius: 10px;
-    color: var(--text-color);
-    font-weight: bold;
-    font-size: 20px;
-  }
+[data-event] .today {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  background: var(--background-color);
+  padding: 4px 10px;
+  border-radius: 10px;
+  color: var(--text-color);
+  font-weight: bold;
+  font-size: 20px;
 }
 
 [data-add] {
   margin-bottom: 20px;
   display: block;
-  font-size:12px;
+  font-size: 12px;
   border-bottom: 1px solid #aaa;
   text-align: center;
   margin-top: -5px;

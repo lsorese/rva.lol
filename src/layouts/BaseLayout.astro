@@ -16,17 +16,19 @@ const { title } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   </head>
   <body>
-    <header>
-      <div data-lol><a href="/">RVA SONGWRITERS</a> @ rva.lol</div>
-      <nav>
-        <ul>
-          <li><a href="/">Open Mics</a></li>
-          <li><a href="/showcases">Showcases</a></li>
-          <li><a href="/booking">Get Booked!</a></li>
-        </ul>
-      </nav>
-    </header>
     <main class="container">
+      <header>
+        <div data-lol><a href="/">RVA SONGWRITERS</a> @ rva.lol</div>
+        <nav>
+          <ul>
+            <li><a href="/">Open Mics</a></li>
+            <li><a href="/showcases">Showcases</a></li>
+            <li><a href="/booking">Get Booked!</a></li>
+            <li><a href="/booking">About!</a></li>
+            <li><a href="/booking">Camel Sessions</a></li>
+          </ul>
+        </nav>
+      </header>
       <slot />
     </main>
     <footer>

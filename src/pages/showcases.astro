@@ -24,7 +24,6 @@ const events = await getCalendarEvents('7c54a7efcbad1512c0061bacfc4635726f1893ed
           </h3>
         )}
         <p><strong>Info:</strong><br /><span set:html={decodeHtml(event.description || '')}></span></p>
-
         {event.location && (
           <p>
             <strong>Location:</strong> {event.location}<br />
