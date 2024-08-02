@@ -1,9 +1,14 @@
 import { defineConfig } from 'astro/config';
-import vercel from '@astrojs/vercel';
+import vercel from '@astrojs/vercel/serverless';
 
-// https://astro.build/config
 export default defineConfig({
+    output: "server",
     adapter: vercel({
-      isr: true,
+        isr: {
+            // A secret random string that you create.
+            bypassToken: "666hailsatanlordofdarkness666",
+            // Paths that will always be served fresh.
+            exclude: [ "/index.astro", "/" ]
+        }
     })
-});
+})
