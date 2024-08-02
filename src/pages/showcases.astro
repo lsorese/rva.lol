@@ -6,7 +6,7 @@ import { formatDate, isToday, decodeHtml, capitalizeFirstLetter, formatRecurrenc
 const events = await getCalendarEvents('SHOWCASES');
 ---
 
-<BaseLayout title="Upcoming Events">
+<BaseLayout title="RVA Songwriter Showcases">
   <h1>Showcases:</h1>
   <a data-add href="https://calendar.google.com/calendar/ical/7c54a7efcbad1512c0061bacfc4635726f1893ed9db7456b4b1b05c8b9c26561%40group.calendar.google.com/public/basic.ics" target="_blank">Add these events to your calendar -></a>
   {events.map((event) => {
