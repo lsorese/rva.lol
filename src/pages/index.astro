@@ -70,7 +70,7 @@ function capitalizeFirstLetter(string) {
           <h3>{capitalizeFirstLetter(event.recurrence.map(rrule => formatRecurrence(rrule)).join(', '))}
           </h3>
         )}
-        <p set:html={decodeHtml(event.description || '')}></p>
+        <p><strong>Info:</strong><br /><span set:html={decodeHtml(event.description || '')}></span></p>
 
         {event.location && (
           <p>
