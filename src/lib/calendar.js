@@ -1,12 +1,12 @@
 // lib/calendar.js
 import axios from 'axios';
 import pkg from 'rrule';
-const {RRule} = pkg;
+const { RRule } = pkg;
 
-const API_KEY = import.meta.env.PUBLIC_API_KEY;
-const CALENDAR_ID = import.meta.env.PUBLIC_CALENDAR_ID;
+export async function getCalendarEvents(calendarIdEnvVar) {
+  const API_KEY = import.meta.env.PUBLIC_API_KEY;
+  const CALENDAR_ID = import.meta.env[calendarIdEnvVar];
 
-export async function getCalendarEvents() {
   const response = await axios.get(
     `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}`
   );

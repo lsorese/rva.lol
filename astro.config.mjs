@@ -8,7 +8,7 @@ export default defineConfig({
             // A secret random string that you create.
             bypassToken: "666666666hailsatanlordofdarkness666666666",
             // Paths that will always be served fresh.
-            exclude: [ "/index.astro", "/" ]
+            exclude: [ "/index.astro", "showcases.astro", "/showcases"]
         }
     })
 })

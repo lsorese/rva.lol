@@ -1,57 +1,11 @@
 ---
-// src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCalendarEvents } from '../lib/calendar';
-import { RRule, RRuleSet } from 'rrule';
-import pkg from 'rrule';
-const {rrulestr} = pkg;
-import he from 'he';
+import { formatDate, isToday, decodeHtml, capitalizeFirstLetter, formatRecurrence, generateGoogleMapsLink } from '../utils';
 
-export async function getStaticPaths() {
-  const events = await getCalendarEvents();
-
-  return {
-    paths: events.map(event => ({ params: { id: event.id } })),
-    fallback: 'blocking',
-    revalidate: 60,
-  };
-}
-
-const events = await getCalendarEvents();
-
-function generateGoogleMapsLink(location) {
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
-}
-
-function decodeHtml(html) {
-  return he.decode(html);
-}
-
-function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-}
-
-function isToday(dateString) {
-  const eventDate = new Date(dateString);
-  const today = new Date();
-  return (
-    eventDate.getDate() === today.getDate() &&
-    eventDate.getMonth() === today.getMonth() &&
-    eventDate.getFullYear() === today.getFullYear()
-  );
-}
-
-function formatRecurrence(rrule) {
-  const rule = rrulestr(rrule);
-  return rule.toText(); // Returns a human-readable description of the recurrence rule
-}
-
-function capitalizeFirstLetter(string) {
-  if (!string) return ''; // Handle empty or undefined string
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
+const events = await getCalendarEvents('OPENMICS');
 ---
+
 
 <BaseLayout title="Upcoming Events">
   <h1>Open Mics:</h1>
