@@ -15,7 +15,7 @@
 body {
   background-color: var(--background-color);
   color: var(--text-color);
-  font-family: "Pixelify Sans", sans-serif;
+  font-family: "Space Mono", monospace;
   font-optical-sizing: auto;
   font-style: normal;
   padding: 0 20px;
@@ -38,7 +38,7 @@ body {
 
 .container {
   max-width: 800px;
-  margin: 40px auto;
+  margin: auto;
   padding: 0;
   text-align: left;
 }
@@ -83,8 +83,32 @@ nav {
 
 h1,
 h2 {
+  font-family: "Space Mono", sans-serif;
   color: var(--heading-color);
   margin-top: 0;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 28px;
+  margin-bottom: 0;
+  display: block; ;
+  small {
+    display: block;
+    margin-top: 6px;
+  }
+}
+
+h3 {
+  padding:0;
+  margin: 0;
+  display: block;
+  opacity: .8;
 }
 
 p:last-of-type {
@@ -118,12 +142,9 @@ li {
 }
 
 [data-event] {
-  position: relative;
-  padding: 20px;
-  border: 6px solid #264CDF;
-  background: rgba(255, 255, 255, 0.4);
-  box-shadow: 0.75em 0.75em 0px 0em #264CDF;
-  margin-bottom: 40px; 
+  border-bottom: 4px dotted #aaa;
+  padding-bottom:20px;
+  margin-bottom: 40px;
 
   .today {
     position: absolute;
