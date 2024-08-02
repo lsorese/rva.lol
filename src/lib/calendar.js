@@ -3,9 +3,13 @@ import axios from 'axios';
 import pkg from 'rrule';
 const { RRule } = pkg;
 
+const OPENMICS = "";
+const SHOWCASES = "";
+
+
 export async function getCalendarEvents(calendarIdEnvVar) {
   const API_KEY = import.meta.env.PUBLIC_API_KEY;
-  const CALENDAR_ID = import.meta.env[calendarIdEnvVar];
+  const CALENDAR_ID = calendarIdEnvVar;
   console.log(import.meta.env.PUBLIC_API_KEY, "API KEY")
   console.log(`https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}`, "URL")
 
