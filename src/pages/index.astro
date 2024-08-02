@@ -2,7 +2,9 @@
 // src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCalendarEvents } from '../lib/calendar';
-import { parseRRule } from '../lib/rruleParser';
+import { RRule, RRuleSet } from 'rrule';
+import pkg from 'rrule';
+const {rrulestr} = pkg;
 import he from 'he';
 
 export async function getStaticPaths() {
@@ -10,8 +12,8 @@ export async function getStaticPaths() {
 
   return {
     paths: events.map(event => ({ params: { id: event.id } })),
-    fallback: 'blocking', // Blocking fallback for ISR
-    revalidate: 60, // Revalidate every 60 seconds
+    fallback: 'blocking',
+    revalidate: 60,
   };
 }
 
@@ -39,29 +41,43 @@ function isToday(dateString) {
     eventDate.getFullYear() === today.getFullYear()
   );
 }
+
+function formatRecurrence(rrule) {
+  const rule = rrulestr(rrule);
+  return rule.toText(); // Returns a human-readable description of the recurrence rule
+}
+
+function capitalizeFirstLetter(string) {
+  if (!string) return ''; // Handle empty or undefined string
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 ---
 
 <BaseLayout title="Upcoming Events">
-  {events.map((event) => (
-    <div 
-      data-event
-      key={event.id} 
-      class={isToday(event.start.dateTime || event.start.date) ? 'today-event' : ''}
-    >
-      {isToday(event.start.dateTime || event.start.date) && <div class="today">TODAY!</div>}
-      <h2>{event.summary}</h2>
-      <p set:html={decodeHtml(event.description || '')}></p>
-      {event.recurrence && (
-        <p><strong>Recurrence:</strong> {event.recurrence.map(rrule => parseRRule(rrule)).join(', ')}</p>
-      )}
-      <p><strong>Next Date:</strong> {formatDate(event.start.dateTime || event.start.date)}</p>
+  {events.map((event) => {
+    const eventStart = event.start.dateTime || event.start.date;
+    return (
+      <div 
+        data-event
+        key={event.id} 
+        class={isToday(eventStart) ? 'today-event' : ''}
+      >
+        {isToday(eventStart) && <div class="today">TODAY!</div>}
+        <h2>{event.summary}</h2>
+        {event.recurrence && (
+          <h3>{formatDate(eventStart)}: 
+            {capitalizeFirstLetter(event.recurrence.map(rrule => formatRecurrence(rrule)).join(', '))}
+          </h3>
+        )}
+        <p set:html={decodeHtml(event.description || '')}></p>
 
-      {event.location && (
-        <p>
-          <strong>Location:</strong> {event.location} 
-          <a href={generateGoogleMapsLink(event.location)} target="_blank" rel="noopener noreferrer"> (View on Google Maps)</a>
-        </p>
-      )}
-    </div>
-  ))}
+        {event.location && (
+          <p>
+            <strong>Location:</strong> {event.location} 
+            <a href={generateGoogleMapsLink(event.location)} target="_blank" rel="noopener noreferrer"> (View on Google Maps)</a>
+          </p>
+        )}
+      </div>
+    );
+  })}
 </BaseLayout>
