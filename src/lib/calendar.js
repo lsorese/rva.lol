@@ -6,11 +6,14 @@ const { RRule } = pkg;
 export async function getCalendarEvents(calendarIdEnvVar) {
   const API_KEY = import.meta.env.PUBLIC_API_KEY;
   const CALENDAR_ID = import.meta.env[calendarIdEnvVar];
-  console.log(CALENDAR_ID)
+  console.log(CALENDAR_ID, "CALENDAR ID")
 
   const response = await axios.get(
     `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}`
   );
+
+  console.log(`https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}`, "URL")
+
 
   // Current date and time
   const now = new Date();
