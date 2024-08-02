@@ -12,6 +12,11 @@
   --a: rgb(27, 13, 220);
 }
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background-color: var(--background-color);
   color: var(--text-color);
@@ -20,6 +25,7 @@ body {
   font-style: normal;
   padding: 0 20px;
   text-align: center;
+  margin: 0;
 }
 
 [data-theme="dark"] {
@@ -66,7 +72,19 @@ nav {
   }
 
   ul li {
-    margin: 0;
+    position: relative;
+    padding: 0 5px; // Adjust space between items
+    
+    &::before {
+      content: "|"; // The separator
+      position: absolute;
+      opacity: .6;
+      left: -12.5px; // Adjusts position of the separator
+    }
+  
+    &:first-child::before {
+      content: ""; // Removes the separator before the first item
+    }
   }
 
   a {
@@ -91,6 +109,10 @@ h2 {
 h1 {
   text-align: center;
   margin-bottom: 0;
+}
+
+[data-lol] {
+  margin-bottom: 20px;
 }
 
 h2 {
