@@ -3,10 +3,6 @@ import axios from 'axios';
 import pkg from 'rrule';
 const { RRule } = pkg;
 
-const OPENMICS = "";
-const SHOWCASES = "";
-
-
 export async function getCalendarEvents(calendarIdEnvVar) {
   const API_KEY = import.meta.env.PUBLIC_API_KEY;
   const CALENDAR_ID = calendarIdEnvVar;
