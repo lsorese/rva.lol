@@ -21,12 +21,19 @@ try {
 
 <BaseLayout title="RVA Open Mics">
   <h1>Showcases:</h1>
-  <a data-add href="https://calendar.google.com/calendar/ical/7c54a7efcbad1512c0061bacfc4635726f1893ed9db7456b4b1b05c8b9c26561%40group.calendar.google.com/public/basic.ics" target="_blank">Add these events to your calendar -></a>
+
   <div class="toolbar">
     <div id="tab-buttons">
       <button id="listEvents-tab" onclick="showTab('listEvents')">Event List</button><button id="calendar-tab" onclick="showTab('calendar')">Calendar</button>
     </div>
-
+    <a
+      data-add
+      href="https://calendar.google.com/calendar/ical/7c54a7efcbad1512c0061bacfc4635726f1893ed9db7456b4b1b05c8b9c26561%40group.calendar.google.com/public/basic.ics"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Add these events to your calendar →
+    </a>
   </div>
   {!events ? (
     <p>There was an error loading the events or no events available.</p>
