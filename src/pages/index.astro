@@ -7,9 +7,12 @@ import ActualCalendar from '../components/ssrCalendar.jsx';
 
 const cal = getCalendar('openmics');
 let events = [];
+let noRecurring = [];
 
 try {
   events = await getCalendarEvents(cal);
+  noRecurring = await getCalendarEvents(cal, false);
+
 } catch (error) {
   console.error('Error fetching events:', error);
   events = null; // Explicitly set to null on error
@@ -26,7 +29,7 @@ console.log(events)
       <ActualCalendar client:load events={events} />
       <h1>Open Mics:</h1>
       <a data-add href="https://calendar.google.com/calendar/ical/b3d8d5b621d0840f0266cfbcfaaaeb06986e135975d1bc7d73eb74d5edfeaa9f%40group.calendar.google.com/public/basic.ics" target="_blank">Add these events to your calendar -></a>
-      {events.map((event) => {
+      {noRecurring.map((event) => {
         const eventStart = event.start.dateTime || event.start.date;
         return (
           <div 

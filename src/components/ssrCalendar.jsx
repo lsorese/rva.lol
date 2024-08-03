@@ -10,7 +10,7 @@ const transformEvents = (events) => {
     start: new Date(event.start.dateTime || event.start.date),
     end: new Date(event.end.dateTime || event.end.date),
     allDay: !event.start.dateTime, // Assume allDay if only date is provided
-    resource: event // Include the original event object if needed
+    resource: event, // Include the original event object if needed
   }));
 };
 
@@ -25,6 +25,7 @@ const ActualCalendar = ({ events }) => {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 500 }}
+        views={["month", 'week']}
       />
     </div>
   );

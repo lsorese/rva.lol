@@ -2,12 +2,12 @@ import axios from 'axios';
 import pkg from 'rrule';
 const { RRule } = pkg;
 
-export async function getCalendarEvents(calendarIdEnvVar) {
+export async function getCalendarEvents(calendarIdEnvVar, includeRecurring = true) {
   const API_KEY = import.meta.env.PUBLIC_API_KEY;
   const CALENDAR_ID = calendarIdEnvVar;
   const now = new Date();
-  const oneMonthLater = new Date(now);
-  oneMonthLater.setMonth(now.getMonth() + 1);
+  const fourMonthsLater = new Date(now);
+  fourMonthsLater.setMonth(now.getMonth() + 4);
 
   try {
     const response = await axios.get(
@@ -16,7 +16,7 @@ export async function getCalendarEvents(calendarIdEnvVar) {
 
     const events = response.data.items
       .filter(event => event.status === 'confirmed')
-      .flatMap(event => processEvent(event, now, oneMonthLater))
+      .flatMap(event => processEvent(event, now, fourMonthsLater, includeRecurring))
       .filter(event => isUpcomingEvent(event, now))
       .sort(sortByStartDate);
 
@@ -27,15 +27,15 @@ export async function getCalendarEvents(calendarIdEnvVar) {
   }
 }
 
-function processEvent(event, now, oneMonthLater) {
+function processEvent(event, now, fourMonthsLater, includeRecurring) {
   const eventStart = new Date(event.start.dateTime || event.start.date);
   const eventEnd = new Date(event.end.dateTime || event.end.date);
 
   let occurrences = [];
 
-  // If the event is recurring
-  if (event.recurrence) {
-    const nextOccurrences = getNextOccurrences(event, eventStart, oneMonthLater);
+  // If the event is recurring and the flag is true
+  if (includeRecurring && event.recurrence) {
+    const nextOccurrences = getNextOccurrences(event, eventStart, fourMonthsLater);
     occurrences = nextOccurrences.map(nextOccurrence => {
       const duration = eventEnd - eventStart;
       return {
