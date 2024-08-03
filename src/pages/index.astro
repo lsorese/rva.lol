@@ -49,29 +49,29 @@ try {
 </BaseLayout>
 
 <script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Select the default tab (Event List) by default
-    showTab('listEvents');
-  });
+document.addEventListener('DOMContentLoaded', () => {
+  // Select the default tab (Event List) by default
+  showTab('listEvents');
+});
 
-  function showTab(tabName) {
-    const calendarTab = document.getElementById('calendar-tab');
-    const listEventsTab = document.getElementById('listEvents-tab');
-    const calendarContent = document.getElementById('calendar');
-    const listEventsContent = document.getElementById('listEvents');
+function showTab(tabName) {
+  const calendarTab = document.getElementById('calendar-tab');
+  const listEventsTab = document.getElementById('listEvents-tab');
+  const calendarContent = document.getElementById('calendar');
+  const listEventsContent = document.getElementById('listEvents');
 
-    if (tabName === 'calendar') {
-      calendarContent.style.display = 'block';
-      listEventsContent.style.display = 'none';
-      calendarTab.classList.add('active');
-      listEventsTab.classList.remove('active');
-    } else {
-      calendarContent.style.display = 'none';
-      listEventsContent.style.display = 'block';
-      calendarTab.classList.remove('active');
-      listEventsTab.classList.add('active');
-    }
+  if (tabName === 'calendar') {
+    calendarContent.style.display = 'block';
+    listEventsContent.style.display = 'none';
+    calendarTab.classList.add('active');
+    listEventsTab.classList.remove('active');
+  } else {
+    calendarContent.style.display = 'none';
+    listEventsContent.style.display = 'block';
+    calendarTab.classList.remove('active');
+    listEventsTab.classList.add('active');
   }
+}
 </script>
 
 <style>

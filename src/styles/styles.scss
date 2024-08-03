@@ -1,7 +1,7 @@
 :root {
   --background-color: #f2f2f2;
   --text-color: #000000;
-  --inverse-text-color: #000000;
+  --inverse-text-color: #ffffff;
   --header-footer-bg: #e0e0e0;
   --header-footer-text: #000000;
   --border-color: #000;
@@ -42,7 +42,6 @@ body {
   --today-event-text-color: #fff;
   --a: #ffc107;
   --button-color: #444;
-
 }
 
 .container {
@@ -234,35 +233,37 @@ li {
 #theme-toggle:hover {
   transform: scale(1.2);
 }
+
 .flyout-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Greyed-out overlay */
+  background-color: rgba(0, 0, 0, 0.5);
   transition: opacity 0.3s ease;
   opacity: 0;
-  z-index: 999; /* Ensure overlay is below flyout */
-  pointer-events: none; /* Initially disable interactions */
+  z-index: 999;
+  pointer-events: none;
 }
 
 .flyout-overlay-show {
   opacity: 1;
-  pointer-events: auto; /* Enable interactions when visible */
+  pointer-events: auto;
 }
 
-.flyout {
+flyout {
   position: fixed;
   top: 0;
   right: -100%;
   width: 300px;
   height: 100%;
-  background-color: white;
+  background-color: var(--background-color);
   transition: right 0.3s ease;
   box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.5);
   z-index: 1000;
   overflow-y: auto;
+  color: var(--text-color);
 }
 
 .flyout-show {
@@ -300,26 +301,65 @@ li {
 .rbc-month-row {
   flex-basis: fit-content !important;
   min-height: 20px;
-  .rbc-row-content-scrollable {
-    .rbc-row-content-scroll-container {
-      min-height: 150px !important;
-    }
-  }
 }
 
 .rbc-toolbar {
   flex-direction: row-reverse;
+}
+
 .rbc-toolbar-label {
   text-align: left !important;
-  padding-left:0 !important;
-}
+  padding-left: 0 !important;
 }
 
 button {
-  border-radius: 0 !important;
-  border: 0 !important;
-  padding:5px 10px !important;
+  border: 1px solid var(--border-color);
+  padding: 8px 15px;
   background-color: var(--button-color);
   color: var(--text-color);
-  display: inline-block;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: var(--text-color);
+  color: var(--inverse-text-color);
+  transform: scale(1.05);
+}
+
+.rbc-event,
+.rbc-day-slot .rbc-background-event {
+  border-radius: 0 !important;
+  background-color: var(--a) !important;
+}
+
+.rbc-month-view,
+.rbc-date-cell {
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+.rbc-event-content {
+  color: var(--inverse-text-color);
+}
+
+#tab-buttons button {
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+  background-color: var(--button-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#tab-buttons button.active {
+  background-color: var(--a); /* Active state background color */
+  color: var(--inverse-text-color); /* Active state text color */
+  font-weight: bold;
+}
+
+#tab-buttons button:not(.active):hover {
+  background-color: var(--text-color); /* Hover background color for inactive buttons */
+  color: var(--inverse-text-color); /* Hover text color for inactive buttons */
 }
