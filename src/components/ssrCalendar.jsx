@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const localizer = momentLocalizer(moment);
 
@@ -14,11 +15,28 @@ const transformEvents = (events) => {
   }));
 };
 
+const Modal = ({ event, onClose }) => {
+  return (
+    <div className={`modal ${event ? 'modal-show' : ''}`}>
+      <div className="modal-content">
+        <span className="close" onClick={onClose}>&times;</span>
+        <h2>{event?.title}</h2>
+        </div>
+    </div>
+  );
+};
+
 const ActualCalendar = ({ events }) => {
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const transformedEvents = transformEvents(events);
 
   const handleEventClick = (event) => {
-    alert(event.resource.description || 'No description available');
+    setSelectedEvent(event);
+    console.log(event)
+  };
+
+  const handleCloseModal = () => {
+    setSelectedEvent(null);
   };
 
   return (
@@ -32,6 +50,7 @@ const ActualCalendar = ({ events }) => {
         views={["month", 'week']}
         onSelectEvent={handleEventClick}
       />
+      <Modal event={selectedEvent} onClose={handleCloseModal} />
     </div>
   );
 };
