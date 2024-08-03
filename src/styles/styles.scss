@@ -10,6 +10,7 @@
   --today-event-border: #ffc107;
   --today-event-text-color: #000;
   --a: rgb(27, 13, 220);
+  --button-color: #eee;
 }
 
 * {
@@ -40,6 +41,8 @@ body {
   --today-event-border: #222;
   --today-event-text-color: #fff;
   --a: #ffc107;
+  --button-color: #444;
+
 }
 
 .container {
@@ -213,14 +216,8 @@ li {
 }
 
 [data-add] {
-  margin-bottom: 20px;
   display: block;
   font-size: 12px;
-  margin-bottom: 30px;
-  border-bottom: 4px solid #666;
-  text-align: center;
-  margin-top: -5px;
-  padding-bottom: 10px;
 }
 
 #theme-toggle {
@@ -282,4 +279,47 @@ li {
   right: 10px;
   font-size: 24px;
   cursor: pointer;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  border-bottom: 4px solid #666;
+  text-align: center;
+  margin-top: -5px;
+  padding-bottom: 10px;
+}
+
+.rbc-row-segment .rbc-event-content {
+  display: block !important;
+  overflow: hidden !important;
+  white-space: wrap !important;
+}
+
+.rbc-month-row {
+  flex-basis: fit-content !important;
+  min-height: 20px;
+  .rbc-row-content-scrollable {
+    .rbc-row-content-scroll-container {
+      min-height: 150px !important;
+    }
+  }
+}
+
+.rbc-toolbar {
+  flex-direction: row-reverse;
+.rbc-toolbar-label {
+  text-align: left !important;
+  padding-left:0 !important;
+}
+}
+
+button {
+  border-radius: 0 !important;
+  border: 0 !important;
+  padding:5px 10px !important;
+  background-color: var(--button-color);
+  color: var(--text-color);
+  display: inline-block;
 }

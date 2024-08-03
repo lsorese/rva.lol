@@ -66,7 +66,6 @@ const ActualCalendar = ({ events }) => {
         events={transformedEvents}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 500 }}
         views={["month"]}
         onSelectEvent={handleEventClick}
       />

@@ -19,14 +19,25 @@ try {
 ---
 
 <BaseLayout title="RVA Open Mics">
+  <h1>Open Mics:</h1>
+  <div class="toolbar">
+    <div id="tab-buttons">
+      <button id="eventList-tab" onclick="showTab('eventList')">Event List</button><button id="calendar-tab" onclick="showTab('calendar')">Calendar</button>
+    </div>
+    <a
+    data-add
+    href="https://calendar.google.com/calendar/ical/b3d8d5b621d0840f0266cfbcfaaaeb06986e135975d1bc7d73eb74d5edfeaa9f%40group.calendar.google.com/public/basic.ics"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Add these events to your calendar →
+  </a>
+
+  </div>
   {!events ? (
     <p>There was an error loading the events or no events available.</p>
   ) : (
     <div>
-      <div id="tab-buttons">
-        <button id="eventList-tab" onclick="showTab('eventList')">Event List</button>
-        <button id="calendar-tab" onclick="showTab('calendar')">Calendar</button>
-      </div>
       <div id="eventList" class="tab-content" is:inline>
         <EventList events={noRecurring} />
       </div>
