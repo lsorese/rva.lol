@@ -96,8 +96,15 @@ function getHumanReadableRecurrence(recurrence) {
 
 function isDuplicate(event, occurrences) {
   const eventStart = new Date(event.start.dateTime || event.start.date);
+  const eventTitle = event.summary;
+  
   return occurrences.some(occurrence => {
     const occurrenceStart = new Date(occurrence.start.dateTime || occurrence.start.date);
-    return eventStart.getTime() === occurrenceStart.getTime();
+    const occurrenceTitle = occurrence.summary;
+
+    return (
+      eventTitle === occurrenceTitle &&
+      eventStart.toDateString() === occurrenceStart.toDateString()
+    );
   });
 }
