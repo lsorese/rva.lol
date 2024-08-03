@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCalendarEvents } from '../lib/calendar';
 import { getCalendar } from '../utils';
 import ActualCalendar from '../components/ssrCalendar.jsx';
-import EventList from '../components/eventList.jsx'; // Import the new component
+import EventList from '../components/EventList.jsx'; // Import the new component
 
 const cal = getCalendar('openmics');
 let events = [];
@@ -26,10 +26,10 @@ console.log(events)
     <p>There was an error loading the events or no events available.</p>
   ) : (
     <>
-      <ActualCalendar client:load events={events} />
       <h1>Open Mics:</h1>
       <a data-add href="https://calendar.google.com/calendar/ical/b3d8d5b621d0840f0266cfbcfaaaeb06986e135975d1bc7d73eb74d5edfeaa9f%40group.calendar.google.com/public/basic.ics" target="_blank">Add these events to your calendar →</a>
-      <EventList events={noRecurring} /> {/* Use the new component here */}
+      <ActualCalendar client:load events={events} />
+      <EventList events={noRecurring} />
     </>
   )}
 </BaseLayout>
