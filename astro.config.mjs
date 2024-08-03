@@ -1,10 +1,11 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import vercel from '@astrojs/vercel/serverless';
+import react from '@astrojs/react';
 
 export default defineConfig({
     output: "server",
-    integrations: [mdx()],
+    integrations: [mdx(), react()],
     adapter: vercel({
         isr: {
             // A secret random string that you create.
