@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCalendarEvents } from '../lib/calendar';
 import { getCalendar } from '../utils';
 import ActualCalendar from '../components/ssrCalendar.jsx';
-import EventList from '../components/EventList.jsx'; // Import the new component
+import EventList from '../components/EventList.jsx';
 
 const cal = getCalendar('openmics');
 let events = [];
@@ -12,24 +12,58 @@ let noRecurring = [];
 try {
   events = await getCalendarEvents(cal);
   noRecurring = await getCalendarEvents(cal, false);
-
 } catch (error) {
   console.error('Error fetching events:', error);
   events = null; // Explicitly set to null on error
 }
-
-console.log(events)
 ---
 
 <BaseLayout title="RVA Open Mics">
   {!events ? (
     <p>There was an error loading the events or no events available.</p>
   ) : (
-    <>
-      <h1>Open Mics:</h1>
-      <a data-add href="https://calendar.google.com/calendar/ical/b3d8d5b621d0840f0266cfbcfaaaeb06986e135975d1bc7d73eb74d5edfeaa9f%40group.calendar.google.com/public/basic.ics" target="_blank">Add these events to your calendar →</a>
-      <ActualCalendar client:load events={events} />
-      <EventList events={noRecurring} />
-    </>
+    <div>
+      <div id="tab-buttons">
+        <button id="eventList-tab" onclick="showTab('eventList')">Event List</button>
+        <button id="calendar-tab" onclick="showTab('calendar')">Calendar</button>
+      </div>
+      <div id="eventList" class="tab-content" is:inline>
+        <EventList events={noRecurring} />
+      </div>
+      <div id="calendar" class="tab-content" is:inline style="display: none;">
+        <ActualCalendar client:load events={events} />
+      </div>
+    </div>
   )}
 </BaseLayout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Select the default tab (Event List) by default
+    showTab('eventList');
+  });
+
+  function showTab(tabName) {
+    const calendarTab = document.getElementById('calendar-tab');
+    const eventListTab = document.getElementById('eventList-tab');
+    const calendarContent = document.getElementById('calendar');
+    const eventListContent = document.getElementById('eventList');
+
+    if (tabName === 'calendar') {
+      calendarContent.style.display = 'block';
+      eventListContent.style.display = 'none';
+      calendarTab.classList.add('active');
+      eventListTab.classList.remove('active');
+    } else {
+      calendarContent.style.display = 'none';
+      eventListContent.style.display = 'block';
+      calendarTab.classList.remove('active');
+      eventListTab.classList.add('active');
+    }
+  }
+</script>
+
+<style>
+  .tab-content { display: none; }
+  .active { font-weight: bold; }
+</style>
