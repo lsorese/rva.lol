@@ -129,7 +129,7 @@ h2 {
 h1 {
   text-transform: uppercase;
   text-align: center;
-  margin-bottom: 0;
+  margin-bottom: 16px;
 }
 
 [data-lol] {
@@ -217,6 +217,7 @@ li {
 [data-add] {
   display: block;
   font-size: 12px;
+  line-height: 32px;
 }
 
 #theme-toggle {
@@ -252,7 +253,7 @@ li {
   pointer-events: auto;
 }
 
-flyout {
+.flyout {
   position: fixed;
   top: 0;
   right: -100%;
@@ -290,7 +291,13 @@ flyout {
   text-align: center;
   margin-top: -5px;
   padding-bottom: 10px;
+
+  @media only screen and (max-width: 720px) {
+    flex-direction: column;
+    align-items: center;
+  }
 }
+
 
 .rbc-row-segment .rbc-event-content {
   display: block !important;
