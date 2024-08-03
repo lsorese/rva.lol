@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatDate, isToday, decodeHtml, capitalizeFirstLetter, formatRecurrence, generateGoogleMapsLink } from '../utils';
+import { formatDate, isToday, decodeHtml, capitalizeFirstLetter, generateGoogleMapsLink } from '../utils';
 
 const EventList = ({ events }) => {
   return (
@@ -14,7 +14,7 @@ const EventList = ({ events }) => {
           >
             {isToday(eventStart) && <div className="today">TODAY!</div>}
             <h2>{event.summary}<br />{event.recurrence && (
-              <small>{capitalizeFirstLetter(event.recurrence.map(rrule => formatRecurrence(rrule)).join(', '))}
+              <small>{capitalizeFirstLetter(event.humanRecurrence)}
               </small>
             )}</h2>
             <h3>{formatDate(eventStart)}</h3>

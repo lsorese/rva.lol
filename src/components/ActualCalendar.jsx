@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { formatDate, isToday, decodeHtml, capitalizeFirstLetter, generateGoogleMapsLink } from '../utils';
+
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 const localizer = momentLocalizer(moment);
@@ -38,8 +40,18 @@ const Flyout = ({ event, onClose }) => {
       <div className={`flyout ${event ? 'flyout-show' : ''}`}>
         <div className="flyout-content">
           <span className="close" onClick={onClose}>&times;</span>
-          <h2>{event?.title}</h2>
-          {/* Additional event details can go here */}
+          <h2>{event?.resource?.summary}<br />{event?.resource?.humanRecurrence && (
+            <small>{capitalizeFirstLetter(event?.resource?.humanRecurrence)}
+            </small>
+          )}</h2>
+          <h3>{formatDate(event?.resource?.start.dateTime || event?.resource?.start.date)}</h3>
+          <p><strong>Info:</strong><br /><span dangerouslySetInnerHTML={{ __html: decodeHtml(event?.resource?.description || '') }}></span></p>
+          {event?.resource?.location && (
+            <p>
+              <strong>Location:</strong><br /> {event?.resource?.location}<br />
+              <a href={generateGoogleMapsLink(event?.resource?.location)} target="_blank" rel="noopener noreferrer">(View on Google Maps) →</a>
+            </p>
+          )}
         </div>
       </div>
     </>

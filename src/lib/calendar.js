@@ -41,14 +41,18 @@ function processEvent(event, now, fourMonthsLater, includeRecurring) {
       return {
         ...event,
         start: { dateTime: nextOccurrence.toISOString() },
-        end: { dateTime: new Date(nextOccurrence.getTime() + duration).toISOString() }
+        end: { dateTime: new Date(nextOccurrence.getTime() + duration).toISOString() },
+        humanRecurrence: getHumanReadableRecurrence(event.recurrence),
       };
     });
   }
 
   // Include the original event if it's not a duplicate
   if (!event.recurrence || !isDuplicate(event, occurrences)) {
-    occurrences.push(event);
+    occurrences.push({
+      ...event,
+      humanRecurrence: event.recurrence ? getHumanReadableRecurrence(event.recurrence) : null,
+    });
   }
 
   return occurrences;
@@ -77,6 +81,17 @@ function getNextOccurrences(event, fromDate, toDate) {
   }
 
   return occurrences;
+}
+
+function getHumanReadableRecurrence(recurrence) {
+  if (!recurrence || recurrence.length === 0) return null;
+  try {
+    const rule = RRule.fromString(recurrence[0].replace('RRULE:', ''));
+    return rule.toText();
+  } catch (error) {
+    console.error('Error parsing RRULE:', error);
+    return null;
+  }
 }
 
 function isDuplicate(event, occurrences) {
