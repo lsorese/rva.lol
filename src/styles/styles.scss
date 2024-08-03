@@ -271,11 +271,19 @@ li {
   right: -100%;
   background-color: var(--background-color);
   height: 100%;
-  width: 300px;
+  width: 40vw; /* for desktop */
+  max-width: 40%; /* for desktop */
   overflow-y: auto;
   color: var(--text-color);
   transition: right 0.3s ease;
   box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+@media only screen and (max-width: 720px) {
+  .flyout {
+    width: 85vw; /* for mobile */
+    max-width: unset; /* for mobile */
+  }
 }
 
 .flyout-show {
