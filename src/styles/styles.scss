@@ -222,3 +222,18 @@ li {
   margin-top: -5px;
   padding-bottom: 10px;
 }
+
+#theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: var(--text-color);
+}
+
+#theme-toggle:hover {
+  transform: scale(1.2);
+}
