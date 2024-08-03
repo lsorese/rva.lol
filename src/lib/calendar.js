@@ -1,4 +1,3 @@
-// lib/calendar.js
 import axios from 'axios';
 import pkg from 'rrule';
 const { RRule } = pkg;
@@ -7,6 +6,8 @@ export async function getCalendarEvents(calendarIdEnvVar) {
   const API_KEY = import.meta.env.PUBLIC_API_KEY;
   const CALENDAR_ID = calendarIdEnvVar;
   const now = new Date();
+  const oneMonthLater = new Date(now);
+  oneMonthLater.setMonth(now.getMonth() + 1);
 
   try {
     const response = await axios.get(
@@ -15,7 +16,7 @@ export async function getCalendarEvents(calendarIdEnvVar) {
 
     const events = response.data.items
       .filter(event => event.status === 'confirmed')
-      .map(event => processEvent(event, now))
+      .flatMap(event => processEvent(event, now, oneMonthLater))
       .filter(event => isUpcomingEvent(event, now))
       .sort(sortByStartDate);
 
@@ -26,20 +27,31 @@ export async function getCalendarEvents(calendarIdEnvVar) {
   }
 }
 
-function processEvent(event, now) {
+function processEvent(event, now, oneMonthLater) {
   const eventStart = new Date(event.start.dateTime || event.start.date);
   const eventEnd = new Date(event.end.dateTime || event.end.date);
 
-  if (eventEnd < now && event.recurrence) {
-    const nextOccurrence = getNextOccurrence(event, now);
-    if (nextOccurrence) {
+  let occurrences = [];
+
+  // If the event is recurring
+  if (event.recurrence) {
+    const nextOccurrences = getNextOccurrences(event, eventStart, oneMonthLater);
+    occurrences = nextOccurrences.map(nextOccurrence => {
       const duration = eventEnd - eventStart;
-      event.start.dateTime = nextOccurrence.toISOString();
-      event.end.dateTime = new Date(nextOccurrence.getTime() + duration).toISOString();
-    }
+      return {
+        ...event,
+        start: { dateTime: nextOccurrence.toISOString() },
+        end: { dateTime: new Date(nextOccurrence.getTime() + duration).toISOString() }
+      };
+    });
   }
 
-  return event;
+  // Include the original event if it's not a duplicate
+  if (!event.recurrence || !isDuplicate(event, occurrences)) {
+    occurrences.push(event);
+  }
+
+  return occurrences;
 }
 
 function isUpcomingEvent(event, now) {
@@ -53,16 +65,24 @@ function sortByStartDate(a, b) {
   return dateA - dateB;
 }
 
-function getNextOccurrence(event, fromDate) {
-  if (!event.recurrence) return null;
+function getNextOccurrences(event, fromDate, toDate) {
+  if (!event.recurrence) return [];
 
+  let occurrences = [];
   for (const rruleString of event.recurrence) {
     const rule = RRule.fromString(rruleString.replace('RRULE:', ''));
-    const nextDate = rule.after(fromDate, true);
-    if (nextDate) {
-      return nextDate;
-    }
+    // Ensure occurrences start from the original event date, not before
+    const nextDates = rule.between(fromDate, toDate, true).filter(date => date >= fromDate);
+    occurrences = occurrences.concat(nextDates);
   }
 
-  return null;
+  return occurrences;
+}
+
+function isDuplicate(event, occurrences) {
+  const eventStart = new Date(event.start.dateTime || event.start.date);
+  return occurrences.some(occurrence => {
+    const occurrenceStart = new Date(occurrence.start.dateTime || occurrence.start.date);
+    return eventStart.getTime() === occurrenceStart.getTime();
+  });
 }
