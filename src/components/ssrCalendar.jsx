@@ -17,6 +17,10 @@ const transformEvents = (events) => {
 const ActualCalendar = ({ events }) => {
   const transformedEvents = transformEvents(events);
 
+  const handleEventClick = (event) => {
+    alert(event.resource.description || 'No description available');
+  };
+
   return (
     <div>
       <Calendar
@@ -26,6 +30,7 @@ const ActualCalendar = ({ events }) => {
         endAccessor="end"
         style={{ height: 500 }}
         views={["month", 'week']}
+        onSelectEvent={handleEventClick}
       />
     </div>
   );
