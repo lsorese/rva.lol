@@ -7,8 +7,8 @@ export default defineConfig({
         isr: {
             // A secret random string that you create.
             bypassToken: import.meta.env.ISR,
-            // Paths that will always be served fresh.
-            exclude: ["/", "/showcases" ]
+            // Cache all pages for 2 minutes
+            maxAge: 480
         }
     })
 })
