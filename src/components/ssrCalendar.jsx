@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -15,14 +15,35 @@ const transformEvents = (events) => {
   }));
 };
 
-const Modal = ({ event, onClose }) => {
+const Flyout = ({ event, onClose }) => {
+  const handleBackgroundClick = (e) => {
+    if (e.target.className.includes('flyout-overlay')) {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    if (event) {
+      document.body.style.overflow = 'hidden'; // Prevent background scroll when flyout is open
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [event]);
+
   return (
-    <div className={`modal ${event ? 'modal-show' : ''}`}>
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>&times;</span>
-        <h2>{event?.title}</h2>
+    <>
+      <div
+        className={`flyout-overlay ${event ? 'flyout-overlay-show' : ''}`}
+        onClick={handleBackgroundClick}
+      />
+      <div className={`flyout ${event ? 'flyout-show' : ''}`}>
+        <div className="flyout-content">
+          <span className="close" onClick={onClose}>&times;</span>
+          <h2>{event?.title}</h2>
+          {/* Additional event details can go here */}
         </div>
-    </div>
+      </div>
+    </>
   );
 };
 
@@ -32,10 +53,10 @@ const ActualCalendar = ({ events }) => {
 
   const handleEventClick = (event) => {
     setSelectedEvent(event);
-    console.log(event)
+    console.log(event);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseFlyout = () => {
     setSelectedEvent(null);
   };
 
@@ -50,7 +71,7 @@ const ActualCalendar = ({ events }) => {
         views={["month", 'week']}
         onSelectEvent={handleEventClick}
       />
-      <Modal event={selectedEvent} onClose={handleCloseModal} />
+      <Flyout event={selectedEvent} onClose={handleCloseFlyout} />
     </div>
   );
 };
