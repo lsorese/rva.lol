@@ -17,8 +17,6 @@ const transformEvents = (events) => {
 const ActualCalendar = ({ events }) => {
   const transformedEvents = transformEvents(events);
 
-  console.log(transformedEvents)
-
   return (
     <div>
       <Calendar

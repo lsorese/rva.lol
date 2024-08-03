@@ -3,41 +3,53 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCalendarEvents } from '../lib/calendar';
 import { formatDate, isToday, decodeHtml, capitalizeFirstLetter, formatRecurrence, generateGoogleMapsLink } from '../utils';
 import { getCalendar } from '../utils';
-
-const cal = getCalendar('openmics');
-const events = await getCalendarEvents(cal);
 import ActualCalendar from '../components/ssrCalendar.jsx';
 
+const cal = getCalendar('openmics');
+let events = [];
+
+try {
+  events = await getCalendarEvents(cal);
+} catch (error) {
+  console.error('Error fetching events:', error);
+  events = null; // Explicitly set to null on error
+}
 ---
 
 <BaseLayout title="RVA Open Mics">
-  <ActualCalendar events={events} />
-    <h1>Open Mics:</h1>
-  <a data-add href="https://calendar.google.com/calendar/ical/b3d8d5b621d0840f0266cfbcfaaaeb06986e135975d1bc7d73eb74d5edfeaa9f%40group.calendar.google.com/public/basic.ics" target="_blank">Add these events to your calendar -></a>
-  {events.map((event) => {
-    const eventStart = event.start.dateTime || event.start.date;
-    return (
-      <div 
-        data-event
-        key={event.id} 
-        class={isToday(eventStart) ? 'today-event' : ''}
-      >
-        {isToday(eventStart) && <div class="today">TODAY!</div>}
-        <h2>{event.summary}<br />{event.recurrence && (
-          <small>{capitalizeFirstLetter(event.recurrence.map(rrule => formatRecurrence(rrule)).join(', '))}
-          </small>
-        )}</h2>
-        <h3>{formatDate(eventStart)}</h3>
-        
-        <p><strong>Info:</strong><br /><span set:html={decodeHtml(event.description || '')}></span></p>
+  {!events ? (
+    <p>There was an error loading the events or no events available.</p>
+  ) : (
+    <>
+      <ActualCalendar client:load events={events} />
+      <h1>Open Mics:</h1>
+      <a data-add href="https://calendar.google.com/calendar/ical/b3d8d5b621d0840f0266cfbcfaaaeb06986e135975d1bc7d73eb74d5edfeaa9f%40group.calendar.google.com/public/basic.ics" target="_blank">Add these events to your calendar -></a>
+      {events.map((event) => {
+        const eventStart = event.start.dateTime || event.start.date;
+        return (
+          <div 
+            data-event
+            key={event.id} 
+            class={isToday(eventStart) ? 'today-event' : ''}
+          >
+            {isToday(eventStart) && <div class="today">TODAY!</div>}
+            <h2>{event.summary}<br />{event.recurrence && (
+              <small>{capitalizeFirstLetter(event.recurrence.map(rrule => formatRecurrence(rrule)).join(', '))}
+              </small>
+            )}</h2>
+            <h3>{formatDate(eventStart)}</h3>
+            
+            <p><strong>Info:</strong><br /><span set:html={decodeHtml(event.description || '')}></span></p>
 
-        {event.location && (
-          <p>
-            <strong>Location:</strong><br /> {event.location}<br />
-            <a href={generateGoogleMapsLink(event.location)} target="_blank" rel="noopener noreferrer">(View on Google Maps) -></a>
-          </p>
-        )}
-      </div>
-    );
-  })}
+            {event.location && (
+              <p>
+                <strong>Location:</strong><br /> {event.location}<br />
+                <a href={generateGoogleMapsLink(event.location)} target="_blank" rel="noopener noreferrer">(View on Google Maps) -></a>
+              </p>
+            )}
+          </div>
+        );
+      })}
+    </>
+  )}
 </BaseLayout>
