@@ -1,38 +1,74 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCalendarEvents } from '../lib/calendar';
-import { formatDate, isToday, decodeHtml, capitalizeFirstLetter, formatRecurrence, generateGoogleMapsLink } from '../utils';
 import { getCalendar } from '../utils';
+import ActualCalendar from '../components/ActualCalendar.jsx';
+import ListEvents from '../components/ListEvents.jsx';
 
-const cal = getCalendar('showcases');
-const events = await getCalendarEvents(cal);
+const cal = getCalendar('openmics');
+let events = [];
+let noRecurring = [];
+
+try {
+  events = await getCalendarEvents(cal);
+  console.log(events)
+  noRecurring = await getCalendarEvents(cal, false);
+} catch (error) {
+  console.error('Error fetching events:', error);
+  events = null; // Explicitly set to null on error
+}
 ---
 
-<BaseLayout title="RVA Songwriter Showcases">
+<BaseLayout title="RVA Open Mics">
   <h1>Showcases:</h1>
   <a data-add href="https://calendar.google.com/calendar/ical/7c54a7efcbad1512c0061bacfc4635726f1893ed9db7456b4b1b05c8b9c26561%40group.calendar.google.com/public/basic.ics" target="_blank">Add these events to your calendar -></a>
-  {events.map((event) => {
-    const eventStart = event.start.dateTime || event.start.date;
-    return (
-      <div 
-        data-event
-        key={event.id} 
-        class={isToday(eventStart) ? 'today-event' : ''}
-      >
-        {isToday(eventStart) && <div class="today">TODAY!</div>}
-        <h2>{event.summary}<br /><small>{formatDate(eventStart)}</small></h2>
-        {event.recurrence && (
-          <h3>{capitalizeFirstLetter(event.recurrence.map(rrule => formatRecurrence(rrule)).join(', '))}
-          </h3>
-        )}
-        <p><strong>Info:</strong><br /><span set:html={decodeHtml(event.description || '')}></span></p>
-        {event.location && (
-          <p>
-            <strong>Location:</strong> {event.location}<br />
-            <a href={generateGoogleMapsLink(event.location)} target="_blank" rel="noopener noreferrer">(View on Google Maps) -></a>
-          </p>
-        )}
+  <div class="toolbar">
+    <div id="tab-buttons">
+      <button id="listEvents-tab" onclick="showTab('listEvents')">Event List</button><button id="calendar-tab" onclick="showTab('calendar')">Calendar</button>
+    </div>
+
+  </div>
+  {!events ? (
+    <p>There was an error loading the events or no events available.</p>
+  ) : (
+    <div>
+      <div id="listEvents" class="tab-content" is:inline>
+        <ListEvents events={noRecurring} />
       </div>
-    );
-  })}
+      <div id="calendar" class="tab-content" is:inline style="display: none;">
+        <ActualCalendar client:load events={events} />
+      </div>
+    </div>
+  )}
 </BaseLayout>
+
+<script is:inline>
+document.addEventListener('DOMContentLoaded', () => {
+  // Select the default tab (Event List) by default
+  showTab('listEvents');
+});
+
+function showTab(tabName) {
+  const calendarTab = document.getElementById('calendar-tab');
+  const listEventsTab = document.getElementById('listEvents-tab');
+  const calendarContent = document.getElementById('calendar');
+  const listEventsContent = document.getElementById('listEvents');
+
+  if (tabName === 'calendar') {
+    calendarContent.style.display = 'block';
+    listEventsContent.style.display = 'none';
+    calendarTab.classList.add('active');
+    listEventsTab.classList.remove('active');
+  } else {
+    calendarContent.style.display = 'none';
+    listEventsContent.style.display = 'block';
+    calendarTab.classList.remove('active');
+    listEventsTab.classList.add('active');
+  }
+}
+</script>
+
+<style>
+  .tab-content { display: none; }
+  .active { font-weight: bold; }
+</style>
