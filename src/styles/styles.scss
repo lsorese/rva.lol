@@ -19,14 +19,14 @@
 }
 
 body {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  font-family: "Space Mono", monospace;
-  font-optical-sizing: auto;
-  font-style: normal;
-  padding: 0 20px;
-  text-align: center;
   margin: 0;
+  background-color: var(--background-color);
+  padding: 0 20px;
+  font-style: normal;
+  font-family: "Space Mono", monospace;
+  color: var(--text-color);
+  font-optical-sizing: auto;
+  text-align: center;
 }
 
 [data-theme="dark"] {
@@ -45,16 +45,16 @@ body {
 }
 
 .container {
-  max-width: 666px;
   margin: auto;
+  max-width: 666px;
   padding: 0;
   text-align: left;
 }
 
 header,
 footer {
-  color: var(--header-footer-text);
   padding: 15px 0;
+  color: var(--header-footer-text);
 }
 
 header * {
@@ -67,12 +67,12 @@ header button {
 }
 
 nav ul {
-  list-style: none;
-  padding: 0;
   display: flex;
-  gap: 0 15px;
   justify-content: flex-start;
   flex-wrap: wrap;
+  padding: 0;
+  list-style: none;
+  gap: 0 15px;
 }
 
 @media only screen and (min-width: 720px) {
@@ -83,8 +83,8 @@ nav ul {
 
 nav ul li {
   position: relative;
-  padding: 0 5px;
   margin: 0;
+  padding: 0 5px;
 }
 
 nav ul li:first-child {
@@ -92,22 +92,33 @@ nav ul li:first-child {
   padding: 0;
 }
 
-nav ul li::before {
-  content: "|";
+nav ul li:not(:nth-child(4))::before {
   position: absolute;
-  opacity: 0.6;
   left: -12.5px;
+  content: "|";
+  opacity: 0.6;
   color: #ccc;
 }
+
+@media only screen and (max-width: 720px) {
+  nav ul li:not(:nth-child(4)):not(:nth-child(5))::before {
+    display: none;
+  }
+  nav ul li:nth-child(4) {
+    margin-left:0;
+    padding-left:0;
+  }
+}
+
 
 nav ul li:first-child::before {
   content: "";
 }
 
 nav a {
-  color: var(--text-color);
   text-decoration: none;
   font-weight: bold;
+  color: var(--text-color);
 }
 
 nav a:hover,
@@ -121,15 +132,15 @@ p {
 
 h1,
 h2 {
+  margin-top: 0;
   font-family: "Space Mono", sans-serif;
   color: var(--heading-color);
-  margin-top: 0;
 }
 
 h1 {
+  margin-bottom: 16px;
   text-transform: uppercase;
   text-align: center;
-  margin-bottom: 16px;
 }
 
 [data-lol] {
@@ -144,9 +155,9 @@ h1 {
 }
 
 h2 {
+  margin-bottom: 0;
   font-size: 24px;
   line-height: 28px;
-  margin-bottom: 0;
 }
 
 h2 small {
@@ -156,9 +167,9 @@ h2 small {
 }
 
 h3 {
-  padding: 0;
-  margin: 0;
   display: block;
+  margin: 0;
+  padding: 0;
   font-size: 22px;
 }
 
@@ -168,8 +179,8 @@ p:last-of-type {
 }
 
 a {
-  color: var(--a);
   text-decoration: none;
+  color: var(--a);
 }
 
 a:hover {
@@ -177,8 +188,8 @@ a:hover {
 }
 
 ul {
-  list-style-type: square;
   padding-left: 20px;
+  list-style-type: square;
 }
 
 li {
@@ -186,32 +197,32 @@ li {
 }
 
 .today-event {
-  background-color: var(--today-event-bg);
-  color: var(--today-event-text-color);
-  padding: 15px;
   position: relative;
   margin-top: 40px;
+  background-color: var(--today-event-bg);
+  padding: 15px;
   padding-top: 20px;
+  color: var(--today-event-text-color);
 }
 
 [data-event] {
   border-bottom: 4px dotted #aaa;
-  padding-bottom: 20px;
   margin-bottom: 40px;
+  padding-bottom: 20px;
 }
 
 [data-event] .today {
   position: absolute;
   top: -25px;
   left: 0px;
-  height: 30px;
-  line-height: 30px;
-  background-color: var(--today-event-bg);
-  padding: 4px 15px;
-  color: var(--text-color);
-  font-weight: bold;
-  font-size: 20px;
   border-radius: 2px;
+  background-color: var(--today-event-bg);
+  height: 30px;
+  padding: 4px 15px;
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: bold;
+  color: var(--text-color);
 }
 
 [data-add] {
@@ -224,11 +235,11 @@ li {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: transparent;
   border: none;
-  cursor: pointer;
+  background-color: transparent;
   font-size: 24px;
   color: var(--text-color);
+  cursor: pointer;
 }
 
 #theme-toggle:hover {
@@ -236,16 +247,16 @@ li {
 }
 
 .flyout-overlay {
+  z-index: 999;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  transition: opacity 0.3s ease;
   opacity: 0;
-  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
   pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 .flyout-overlay-show {
@@ -254,17 +265,17 @@ li {
 }
 
 .flyout {
+  z-index: 1000;
   position: fixed;
   top: 0;
   right: -100%;
-  width: 300px;
-  height: 100%;
   background-color: var(--background-color);
-  transition: right 0.3s ease;
-  box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  height: 100%;
+  width: 300px;
   overflow-y: auto;
   color: var(--text-color);
+  transition: right 0.3s ease;
+  box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.5);
 }
 
 .flyout-show {
@@ -286,11 +297,11 @@ li {
 .toolbar {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 30px;
   border-bottom: 4px solid #666;
-  text-align: center;
   margin-top: -5px;
+  margin-bottom: 30px;
   padding-bottom: 10px;
+  text-align: center;
 
   @media only screen and (max-width: 720px) {
     flex-direction: column;
@@ -315,24 +326,24 @@ li {
 }
 
 .rbc-toolbar-label {
-  text-align: left !important;
   padding-left: 0 !important;
+  text-align: left !important;
 }
 
 button {
   border: 1px solid var(--border-color);
-  padding: 8px 15px;
   background-color: var(--button-color);
-  color: var(--text-color);
+  padding: 8px 15px;
   font-weight: bold;
+  color: var(--text-color);
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s, transform 0.2s;
 }
 
 button:hover {
+  transform: scale(1.05);
   background-color: var(--text-color);
   color: var(--inverse-text-color);
-  transform: scale(1.05);
 }
 
 .rbc-event,
@@ -343,8 +354,8 @@ button:hover {
 
 .rbc-month-view,
 .rbc-date-cell {
-  color: var(--text-color);
   background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 .rbc-event-content {
@@ -352,18 +363,18 @@ button:hover {
 }
 
 #tab-buttons button {
-  padding: 8px 15px;
   border: none;
-  cursor: pointer;
   background-color: var(--button-color);
+  padding: 8px 15px;
   color: var(--text-color);
+  cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
 }
 
 #tab-buttons button.active {
   background-color: var(--a); /* Active state background color */
-  color: var(--inverse-text-color); /* Active state text color */
   font-weight: bold;
+  color: var(--inverse-text-color); /* Active state text color */
 }
 
 #tab-buttons button:not(.active):hover {
