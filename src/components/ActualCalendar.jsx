@@ -67,7 +67,7 @@ const ActualCalendar = ({ events }) => {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 500 }}
-        views={["month", 'week']}
+        views={["month"]}
         onSelectEvent={handleEventClick}
       />
       <Flyout event={selectedEvent} onClose={handleCloseFlyout} />

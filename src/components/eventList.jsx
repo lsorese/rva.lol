@@ -4,6 +4,15 @@ import { formatDate, isToday, decodeHtml, capitalizeFirstLetter, formatRecurrenc
 const EventList = ({ events }) => {
   return (
     <>
+      <h1>Open Mics:</h1>
+      <a
+        data-add
+        href="https://calendar.google.com/calendar/ical/b3d8d5b621d0840f0266cfbcfaaaeb06986e135975d1bc7d73eb74d5edfeaa9f%40group.calendar.google.com/public/basic.ics"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Add these events to your calendar →
+      </a>
       {events.map((event) => {
         const eventStart = event.start.dateTime || event.start.date;
         return (
