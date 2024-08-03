@@ -341,20 +341,37 @@ li {
   text-align: left !important;
 }
 
+#tab-buttons,
+.rbc-btn-group {
 button {
-  border: 1px solid var(--border-color);
-  background-color: var(--button-color);
-  padding: 8px 15px;
-  font-weight: bold;
-  color: var(--text-color);
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s, transform 0.2s;
+  border: 0 !important;
+  border: 1px solid var(--border-color) !important;
+  background-color: var(--button-color) !important;
+  padding: 8px 15px !important;
+  font-weight: bold !important;
+  color: var(--text-color) !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s, color 0.3s, transform 0.2s !important;
+  font-size: 16px !important;
 }
 
 button:hover {
-  transform: scale(1.05);
-  background-color: var(--text-color);
-  color: var(--inverse-text-color);
+  transform: scale(1.05) !important;
+  background-color: var(--text-color) !important;
+  color: var(--inverse-text-color) !important;
+}
+}
+
+#tab-buttons {
+  #calendar-tab {
+    position: relative;
+    left: -1px;
+  }
+  &:hover {
+    z-index: 100;
+
+  }
 }
 
 .rbc-event,
@@ -391,4 +408,10 @@ button:hover {
 #tab-buttons button:not(.active):hover {
   background-color: var(--text-color); /* Hover background color for inactive buttons */
   color: var(--inverse-text-color); /* Hover text color for inactive buttons */
+}
+
+.rbc-btn-group {
+  @media only screen and (max-width: 720px) {
+    margin-bottom: 10px;
+  }
 }
