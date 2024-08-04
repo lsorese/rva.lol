@@ -1,6 +1,6 @@
 import axios from 'axios';
 import pkg from 'rrule';
-const { RRule } = pkg;
+const {RRule} = pkg;
 
 export async function getCalendarEvents(calendarIdEnvVar, includeRecurring = true) {
   const API_KEY = import.meta.env.PUBLIC_API_KEY;
@@ -33,7 +33,6 @@ function processEvent(event, now, fourMonthsLater, includeRecurring) {
 
   let occurrences = [];
 
-  // If the event is recurring and the flag is true
   if (includeRecurring && event.recurrence) {
     const nextOccurrences = getNextOccurrences(event, eventStart, fourMonthsLater);
     occurrences = nextOccurrences.map(nextOccurrence => {
@@ -47,7 +46,6 @@ function processEvent(event, now, fourMonthsLater, includeRecurring) {
     });
   }
 
-  // Include the original event if it's not a duplicate
   if (!event.recurrence || !isDuplicate(event, occurrences)) {
     occurrences.push({
       ...event,
@@ -75,7 +73,6 @@ function getNextOccurrences(event, fromDate, toDate) {
   let occurrences = [];
   for (const rruleString of event.recurrence) {
     const rule = RRule.fromString(rruleString.replace('RRULE:', ''));
-    // Ensure occurrences start from the original event date, not before
     const nextDates = rule.between(fromDate, toDate, true).filter(date => date >= fromDate);
     occurrences = occurrences.concat(nextDates);
   }
