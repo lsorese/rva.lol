@@ -9,9 +9,9 @@ export default defineConfig({
     adapter: vercel({
         isr: {
             // A secret random string that you create.
-            bypassToken: import.meta.env.ISR,
-            // Cache all pages for 2 minutes
-            maxAge: 480
+            bypassToken: "hailsatanlordofdarkness66666666666666666",
+            // Uncache everything every 4 minutes
+            maxAge: 240
         }
     })
 })
