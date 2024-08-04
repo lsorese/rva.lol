@@ -73,6 +73,7 @@ nav ul {
   padding: 0;
   list-style: none;
   gap: 0 15px;
+
   @media only screen and (max-width: 720px) {
     max-width: 400px;
   }
@@ -107,12 +108,12 @@ nav ul li::before {
   nav ul li:nth-child(4) {
     margin-left: 0;
     padding-left: 0;
+
     &::before {
       display: none;
     }
   }
 }
-
 
 nav ul li:first-child::before {
   content: "";
@@ -149,10 +150,8 @@ h1 {
 [data-lol] {
   margin-bottom: 20px;
   text-align: left;
-}
 
-@media only screen and (min-width: 720px) {
-  [data-lol] {
+  @media only screen and (min-width: 720px) {
     text-align: center;
   }
 }
@@ -280,10 +279,8 @@ li {
   color: var(--text-color);
   transition: right 0.3s ease;
   box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.5);
-}
 
-@media only screen and (max-width: 720px) {
-  .flyout {
+  @media only screen and (max-width: 720px) {
     width: 85vw;
     max-width: unset;
   }
@@ -320,7 +317,6 @@ li {
   }
 }
 
-
 .rbc-row-segment .rbc-event-content {
   display: block !important;
   overflow: hidden !important;
@@ -343,24 +339,24 @@ li {
 
 #tab-buttons,
 .rbc-btn-group {
-button {
-  border: 0 !important;
-  border: 1px solid var(--border-color) !important;
-  background-color: var(--button-color) !important;
-  padding: 8px 15px !important;
-  font-weight: bold !important;
-  color: var(--text-color) !important;
-  border-radius: 0 !important;
-  cursor: pointer !important;
-  transition: background-color 0.3s, color 0.3s, transform 0.2s !important;
-  font-size: 16px !important;
-}
+  button {
+    border: 0 !important;
+    border: 1px solid var(--border-color) !important;
+    background-color: var(--button-color) !important;
+    padding: 8px 15px !important;
+    font-weight: bold !important;
+    color: var(--text-color) !important;
+    border-radius: 0 !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s !important;
+    font-size: 16px !important;
+  }
 
-button:hover {
-  transform: scale(1.05) !important;
-  background-color: var(--text-color) !important;
-  color: var(--inverse-text-color) !important;
-}
+  button:hover {
+    transform: scale(1.05) !important;
+    background-color: var(--text-color) !important;
+    color: var(--inverse-text-color) !important;
+  }
 }
 
 #tab-buttons {
@@ -368,9 +364,9 @@ button:hover {
     position: relative;
     left: -1px;
   }
+
   &:hover {
     z-index: 100;
-
   }
 }
 
