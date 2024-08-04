@@ -3,16 +3,15 @@ import he from 'he';
 // Date-related utilities
 export function formatDate(dateString) {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString(undefined, options);
+  const date = new Date(dateString);
+  return date.toLocaleDateString(undefined, options);
 }
 
 export function isToday(dateString) {
   const eventDate = new Date(dateString);
   const today = new Date();
   return (
-    eventDate.getDate() === today.getDate() &&
-    eventDate.getMonth() === today.getMonth() &&
-    eventDate.getFullYear() === today.getFullYear()
+    eventDate.toDateString() === today.toDateString()
   );
 }
 
@@ -22,13 +21,14 @@ export function decodeHtml(html) {
 }
 
 export function capitalizeFirstLetter(string) {
-  if (!string) return ''; // Handle empty or undefined string
+  if (!string) return '';
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 // Location-related utilities
 export function generateGoogleMapsLink(location) {
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+  const encodedLocation = encodeURIComponent(location);
+  return `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`;
 }
 
 export function getCalendar(option) {
@@ -39,7 +39,7 @@ export function getCalendar(option) {
 
   if (option in calendars) {
     return calendars[option];
-  } else {
-    throw new Error('Invalid option');
   }
+
+  throw new Error('Invalid option');
 }
