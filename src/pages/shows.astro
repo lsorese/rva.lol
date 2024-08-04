@@ -1,11 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCalendarEvents } from '../lib/calendar';
-import { getCalendar } from '../utils';
+import { getCalendarEvents } from '../lib/calendar.js';
+import { getCalendar } from '../utils.js';
 import ActualCalendar from '../components/ActualCalendar.jsx';
 import ListEvents from '../components/ListEvents.jsx';
 
-const cal = getCalendar('showcases');
+const cal = getCalendar('shows');
 let events = [];
 let noRecurring = [];
 
@@ -19,7 +19,7 @@ try {
 ---
 
 <BaseLayout title="RVA Open Mics">
-  <h1>Showcases:</h1>
+  <h1>shows:</h1>
 
   <div class="toolbar">
     <div id="tab-buttons">

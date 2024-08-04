@@ -34,7 +34,7 @@ export function generateGoogleMapsLink(location) {
 export function getCalendar(option) {
   const calendars = {
     openmics: 'b3d8d5b621d0840f0266cfbcfaaaeb06986e135975d1bc7d73eb74d5edfeaa9f@group.calendar.google.com',
-    showcases: '7c54a7efcbad1512c0061bacfc4635726f1893ed9db7456b4b1b05c8b9c26561@group.calendar.google.com',
+    shows: '7c54a7efcbad1512c0061bacfc4635726f1893ed9db7456b4b1b05c8b9c26561@group.calendar.google.com',
   };
 
   if (option in calendars) {

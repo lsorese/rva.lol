@@ -29,6 +29,10 @@ body {
   text-align: center;
 }
 
+* {
+  font-family: "Space Mono", monospace !important
+}
+
 [data-theme="dark"] {
   --background-color: #1c1c1c;
   --text-color: #ffffff;
@@ -349,7 +353,7 @@ li {
     border-radius: 0 !important;
     cursor: pointer !important;
     transition: background-color 0.3s, color 0.3s, transform 0.2s !important;
-    font-size: 16px !important;
+    font-size: 14px !important;
   }
 
   button:hover {
