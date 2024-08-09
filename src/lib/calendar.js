@@ -1,6 +1,6 @@
 import axios from 'axios';
 import pkg from 'rrule';
-const {RRule} = pkg;
+const { RRule } = pkg;
 
 export async function getCalendarEvents(calendarIdEnvVar, includeRecurring = true) {
   const API_KEY = import.meta.env.PUBLIC_API_KEY;
@@ -30,22 +30,40 @@ export async function getCalendarEvents(calendarIdEnvVar, includeRecurring = tru
 function processEvent(event, now, fourMonthsLater, includeRecurring) {
   const eventStart = new Date(event.start.dateTime || event.start.date);
   const eventEnd = new Date(event.end.dateTime || event.end.date);
+  const thirtyDaysLater = new Date(now);
+  thirtyDaysLater.setDate(now.getDate() + 30);
 
   let occurrences = [];
 
-  if (includeRecurring && event.recurrence) {
-    const nextOccurrences = getNextOccurrences(event, eventStart, fourMonthsLater);
-    occurrences = nextOccurrences.map(nextOccurrence => {
-      const duration = eventEnd - eventStart;
-      return {
-        ...event,
-        start: { dateTime: nextOccurrence.toISOString() },
-        end: { dateTime: new Date(nextOccurrence.getTime() + duration).toISOString() },
-        humanRecurrence: getHumanReadableRecurrence(event.recurrence),
-      };
-    });
+  if (event.recurrence) {
+    if (includeRecurring) {
+      // Include all future occurrences within the time range
+      const nextOccurrences = getNextOccurrences(event, now, fourMonthsLater);
+      occurrences = nextOccurrences.map(nextOccurrence => {
+        const duration = eventEnd - eventStart;
+        return {
+          ...event,
+          start: { dateTime: nextOccurrence.toISOString() },
+          end: { dateTime: new Date(nextOccurrence.getTime() + duration).toISOString() },
+          humanRecurrence: getHumanReadableRecurrence(event.recurrence),
+        };
+      });
+    } else {
+      // Include all occurrences within the next 30 days
+      const nextOccurrences = getNextOccurrences(event, now, thirtyDaysLater);
+      occurrences = nextOccurrences.map(nextOccurrence => {
+        const duration = eventEnd - eventStart;
+        return {
+          ...event,
+          start: { dateTime: nextOccurrence.toISOString() },
+          end: { dateTime: new Date(nextOccurrence.getTime() + duration).toISOString() },
+          humanRecurrence: getHumanReadableRecurrence(event.recurrence),
+        };
+      });
+    }
   }
 
+  // Include the original event if it's not a duplicate
   if (!event.recurrence || !isDuplicate(event, occurrences)) {
     occurrences.push({
       ...event,
@@ -94,7 +112,7 @@ function getHumanReadableRecurrence(recurrence) {
 function isDuplicate(event, occurrences) {
   const eventStart = new Date(event.start.dateTime || event.start.date);
   const eventTitle = event.summary;
-  
+
   return occurrences.some(occurrence => {
     const occurrenceStart = new Date(occurrence.start.dateTime || occurrence.start.date);
     const occurrenceTitle = occurrence.summary;
