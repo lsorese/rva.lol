@@ -122,7 +122,7 @@ function sortByStartDate(a, b) {
 }
 
 function getHumanReadableRecurrence(recurrence) {
-  if (!recurrence or recurrence.length === 0) return null;
+  if (!recurrence || recurrence.length === 0) return null;
   try {
     const rule = RRule.fromString(recurrence[0].replace('RRULE:', ''));
     return rule.toText();
