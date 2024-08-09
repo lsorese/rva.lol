@@ -11,7 +11,8 @@ export default defineConfig({
             // A secret random string that you create.
             bypassToken: "hailsatanlordofdarkness66666666666666666",
             // Uncache everything every 4 minutes
-            maxAge: 240
+            maxAge: 240,
+            exclude: ["/", "/shows" ]
         }
     })
 })
