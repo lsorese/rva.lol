@@ -3,6 +3,21 @@ import "../styles/styles.scss";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const { title } = Astro.props;
+
+// Array of synonyms for "Rad"
+const synonyms = [
+  "Awesome", "Cool", "Epic", "Sick", "Dope", "Gnarly",
+  "Rad", "Lit", "Fire", "Legit", "Killer", "Bomb", "Sweet",
+  "Fresh", "Tight", "Mint", "Prime"
+];
+
+// Function to get a random synonym
+function fuckingRad() {
+  return synonyms[Math.floor(Math.random() * synonyms.length)];
+}
+
+// Generate the random synonym server-side
+const superFuckingRad = fuckingRad();
 ---
 
 <!DOCTYPE html>
@@ -26,7 +41,7 @@ const { title } = Astro.props;
         <nav>
           <ul>
             <li><a href="/">Open Mics</a></li>
-            <li><a href="/shows">Shows</a></li>
+            <li><a href="/shows">{superFuckingRad} Shows</a></li>
             <li><a href="/booking">Get Booked!</a></li>
             <li><a href="/camelsessions">Camel Sessions</a></li>
           </ul>
