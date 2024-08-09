@@ -240,16 +240,17 @@ li {
 #theme-toggle {
   position: fixed;
   bottom: 20px;
-  right: 20px;
+  right: 0px;
   border: none;
   background-color: transparent;
-  font-size: 24px;
+  font-size: 12px;
   color: var(--text-color);
   cursor: pointer;
+  transform: rotate(-90deg);
 }
 
 #theme-toggle:hover {
-  transform: scale(1.2);
+  transform: scale(1.2) rotate(-90deg);
 }
 
 .flyout-overlay {
