@@ -28,8 +28,8 @@ export async function getCalendarEvents(calendarIdEnvVar, includeRecurring = tru
 }
 
 function processEvent(event, now, fourMonthsLater, includeRecurring) {
-  const eventStart = new Date(event.start.dateTime || event.start.date);
-  const eventEnd = new Date(event.end.dateTime || event.end.date);
+  const eventStart = shiftDateByOneDay(new Date(event.start.dateTime || event.start.date));
+  const eventEnd = shiftDateByOneDay(new Date(event.end.dateTime || event.end.date));
   const thirtyDaysLater = new Date(now);
   thirtyDaysLater.setDate(now.getDate() + 30);
 
@@ -41,10 +41,11 @@ function processEvent(event, now, fourMonthsLater, includeRecurring) {
       const nextOccurrences = getNextOccurrences(event, now, fourMonthsLater);
       occurrences = nextOccurrences.map(nextOccurrence => {
         const duration = eventEnd - eventStart;
+        const shiftedStart = shiftDateByOneDay(nextOccurrence);
         return {
           ...event,
-          start: { dateTime: nextOccurrence.toISOString() },
-          end: { dateTime: new Date(nextOccurrence.getTime() + duration).toISOString() },
+          start: { dateTime: shiftedStart.toISOString() },
+          end: { dateTime: new Date(shiftedStart.getTime() + duration).toISOString() },
           humanRecurrence: getHumanReadableRecurrence(event.recurrence),
         };
       });
@@ -53,10 +54,11 @@ function processEvent(event, now, fourMonthsLater, includeRecurring) {
       const nextOccurrences = getNextOccurrences(event, now, thirtyDaysLater);
       occurrences = nextOccurrences.map(nextOccurrence => {
         const duration = eventEnd - eventStart;
+        const shiftedStart = shiftDateByOneDay(nextOccurrence);
         return {
           ...event,
-          start: { dateTime: nextOccurrence.toISOString() },
-          end: { dateTime: new Date(nextOccurrence.getTime() + duration).toISOString() },
+          start: { dateTime: shiftedStart.toISOString() },
+          end: { dateTime: new Date(shiftedStart.getTime() + duration).toISOString() },
           humanRecurrence: getHumanReadableRecurrence(event.recurrence),
         };
       });
@@ -67,6 +69,8 @@ function processEvent(event, now, fourMonthsLater, includeRecurring) {
   if (!event.recurrence || !isDuplicate(event, occurrences)) {
     occurrences.push({
       ...event,
+      start: { dateTime: eventStart.toISOString() },
+      end: { dateTime: eventEnd.toISOString() },
       humanRecurrence: event.recurrence ? getHumanReadableRecurrence(event.recurrence) : null,
     });
   }
@@ -74,28 +78,55 @@ function processEvent(event, now, fourMonthsLater, includeRecurring) {
   return occurrences;
 }
 
-function isUpcomingEvent(event, now) {
-  const eventStart = new Date(event.start.dateTime || event.start.date);
-  return eventStart >= now;
-}
-
-function sortByStartDate(a, b) {
-  const dateA = new Date(a.start.dateTime || a.start.date);
-  const dateB = new Date(b.start.dateTime || b.start.date);
-  return dateA - dateB;
+function shiftDateByOneDay(date) {
+  const shiftedDate = new Date(date);
+  shiftedDate.setDate(shiftedDate.getDate() + 1);  // Shift the date by one day
+  return shiftedDate;
 }
 
 function getNextOccurrences(event, fromDate, toDate) {
   if (!event.recurrence) return [];
 
   let occurrences = [];
+  const originalStart = shiftDateByOneDay(new Date(event.start.dateTime || event.start.date));
+
   for (const rruleString of event.recurrence) {
     const rule = RRule.fromString(rruleString.replace('RRULE:', ''));
+
+    // Generate recurrence dates between fromDate and toDate
     const nextDates = rule.between(fromDate, toDate, true).filter(date => date >= fromDate);
-    occurrences = occurrences.concat(nextDates);
+
+    occurrences = occurrences.concat(
+      nextDates
+        .filter(date => date >= originalStart)  // Ensure no occurrence is before the original event's start date
+        .map(date => {
+          const occurrence = new Date(date);
+
+          // Set the time of day to match the original event's start time
+          occurrence.setHours(
+            originalStart.getHours(),
+            originalStart.getMinutes(),
+            originalStart.getSeconds(),
+            originalStart.getMilliseconds()
+          );
+
+          return occurrence;
+        })
+    );
   }
 
   return occurrences;
+}
+
+function isUpcomingEvent(event, now) {
+  const eventStart = shiftDateByOneDay(new Date(event.start.dateTime || event.start.date));
+  return eventStart >= now;
+}
+
+function sortByStartDate(a, b) {
+  const dateA = shiftDateByOneDay(new Date(a.start.dateTime || a.start.date));
+  const dateB = shiftDateByOneDay(new Date(b.start.dateTime || b.start.date));
+  return dateA - dateB;
 }
 
 function getHumanReadableRecurrence(recurrence) {
@@ -110,11 +141,11 @@ function getHumanReadableRecurrence(recurrence) {
 }
 
 function isDuplicate(event, occurrences) {
-  const eventStart = new Date(event.start.dateTime || event.start.date);
+  const eventStart = shiftDateByOneDay(new Date(event.start.dateTime || event.start.date));
   const eventTitle = event.summary;
 
   return occurrences.some(occurrence => {
-    const occurrenceStart = new Date(occurrence.start.dateTime || occurrence.start.date);
+    const occurrenceStart = shiftDateByOneDay(new Date(occurrence.start.dateTime || occurrence.start.date));
     const occurrenceTitle = occurrence.summary;
 
     return (
