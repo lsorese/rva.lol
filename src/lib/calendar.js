@@ -28,8 +28,8 @@ export async function getCalendarEvents(calendarIdEnvVar, includeRecurring = tru
 }
 
 function processEvent(event, now, fourMonthsLater, includeRecurring) {
-  const eventStart = shiftDateByOneDay(new Date(event.start.dateTime || event.start.date));
-  const eventEnd = shiftDateByOneDay(new Date(event.end.dateTime || event.end.date));
+  const eventStart = new Date(event.start.dateTime || event.start.date);
+  const eventEnd = new Date(event.end.dateTime || event.end.date);
   const thirtyDaysLater = new Date(now);
   thirtyDaysLater.setDate(now.getDate() + 30);
 
@@ -41,11 +41,10 @@ function processEvent(event, now, fourMonthsLater, includeRecurring) {
       const nextOccurrences = getNextOccurrences(event, now, fourMonthsLater);
       occurrences = nextOccurrences.map(nextOccurrence => {
         const duration = eventEnd - eventStart;
-        const shiftedStart = shiftDateByOneDay(nextOccurrence);
         return {
           ...event,
-          start: { dateTime: shiftedStart.toISOString() },
-          end: { dateTime: new Date(shiftedStart.getTime() + duration).toISOString() },
+          start: { dateTime: nextOccurrence.toISOString() },
+          end: { dateTime: new Date(nextOccurrence.getTime() + duration).toISOString() },
           humanRecurrence: getHumanReadableRecurrence(event.recurrence),
         };
       });
@@ -54,11 +53,10 @@ function processEvent(event, now, fourMonthsLater, includeRecurring) {
       const nextOccurrences = getNextOccurrences(event, now, thirtyDaysLater);
       occurrences = nextOccurrences.map(nextOccurrence => {
         const duration = eventEnd - eventStart;
-        const shiftedStart = shiftDateByOneDay(nextOccurrence);
         return {
           ...event,
-          start: { dateTime: shiftedStart.toISOString() },
-          end: { dateTime: new Date(shiftedStart.getTime() + duration).toISOString() },
+          start: { dateTime: nextOccurrence.toISOString() },
+          end: { dateTime: new Date(nextOccurrence.getTime() + duration).toISOString() },
           humanRecurrence: getHumanReadableRecurrence(event.recurrence),
         };
       });
@@ -78,17 +76,11 @@ function processEvent(event, now, fourMonthsLater, includeRecurring) {
   return occurrences;
 }
 
-function shiftDateByOneDay(date) {
-  const shiftedDate = new Date(date);
-  shiftedDate.setDate(shiftedDate.getDate() + 1);  // Shift the date by one day
-  return shiftedDate;
-}
-
 function getNextOccurrences(event, fromDate, toDate) {
   if (!event.recurrence) return [];
 
   let occurrences = [];
-  const originalStart = shiftDateByOneDay(new Date(event.start.dateTime || event.start.date));
+  const originalStart = new Date(event.start.dateTime || event.start.date);
 
   for (const rruleString of event.recurrence) {
     const rule = RRule.fromString(rruleString.replace('RRULE:', ''));
@@ -119,18 +111,18 @@ function getNextOccurrences(event, fromDate, toDate) {
 }
 
 function isUpcomingEvent(event, now) {
-  const eventStart = shiftDateByOneDay(new Date(event.start.dateTime || event.start.date));
+  const eventStart = new Date(event.start.dateTime || event.start.date);
   return eventStart >= now;
 }
 
 function sortByStartDate(a, b) {
-  const dateA = shiftDateByOneDay(new Date(a.start.dateTime || a.start.date));
-  const dateB = shiftDateByOneDay(new Date(b.start.dateTime || b.start.date));
+  const dateA = new Date(a.start.dateTime || a.start.date);
+  const dateB = new Date(b.start.dateTime || b.start.date);
   return dateA - dateB;
 }
 
 function getHumanReadableRecurrence(recurrence) {
-  if (!recurrence || recurrence.length === 0) return null;
+  if (!recurrence or recurrence.length === 0) return null;
   try {
     const rule = RRule.fromString(recurrence[0].replace('RRULE:', ''));
     return rule.toText();
@@ -141,11 +133,11 @@ function getHumanReadableRecurrence(recurrence) {
 }
 
 function isDuplicate(event, occurrences) {
-  const eventStart = shiftDateByOneDay(new Date(event.start.dateTime || event.start.date));
+  const eventStart = new Date(event.start.dateTime || event.start.date);
   const eventTitle = event.summary;
 
   return occurrences.some(occurrence => {
-    const occurrenceStart = shiftDateByOneDay(new Date(occurrence.start.dateTime || occurrence.start.date));
+    const occurrenceStart = new Date(occurrence.start.dateTime || occurrence.start.date);
     const occurrenceTitle = occurrence.summary;
 
     return (
