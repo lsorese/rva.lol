@@ -5,7 +5,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 const { title } = Astro.props;
 
 // Define a variable for the site title
-const siteTitle = title || 'lol';
+const siteTitle = title || "lol";
 
 // Array of synonyms for "Rad"
 const synonyms = [
@@ -53,14 +53,14 @@ const superFuckingRad = fuckingRad();
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://rva.lol/" />
-    <meta property="og:title" content="{siteTitle}" />
+    <meta property="og:title" content={siteTitle} />
     <meta property="og:description" content="Discover the best open mics and shows in RVA!" />
     <meta property="og:image" content="https://rva.lol/path/to/image.jpg" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://rva.lol/" />
-    <meta property="twitter:title" content="{siteTitle}" />
+    <meta property="twitter:title" content={siteTitle} />
     <meta property="twitter:description" content="Discover the best open mics and shows in RVA!" />
     <meta property="twitter:image" content="https://rva.lol/path/to/image.jpg" />
   </head>
