@@ -56,6 +56,19 @@ const Flyout = ({ event, onClose }) => {
             )}
           </h2>
           <h3>{formatDate(event?.resource?.start.dateTime || event?.resource?.start.date)}</h3>
+          {event?.resource?.attachments && event.resource.attachments.length > 0 && (
+              <details>
+                <summary><strong>Event Poster</strong></summary>
+                {event.resource.attachments.map((attachment, index) => (
+                  <img 
+                    key={index}
+                    src={`/event-images/${attachment.title}`}
+                    alt={attachment.title}
+                    style={{ maxWidth: '100%', height: 'auto' }}
+                  />
+                ))}
+              </details>
+            )}
           <p>
             <strong>Info:</strong><br />
             <span dangerouslySetInnerHTML={{ __html: decodeHtml(event?.resource?.description || '') }}></span>
