@@ -1,10 +1,11 @@
-import { formatDate, isToday, decodeHtml, capitalizeFirstLetter, generateGoogleMapsLink } from '../utils';
+import { formatDate, isToday, decodeHtml, capitalizeFirstLetter, generateGoogleMapsLink, getDaysUntilEvent } from '../utils';
 
 const EventList = ({ events }) => {
   return (
     <>
       {events.map((event) => {
         const eventStart = event.start.dateTime || event.start.date;
+        const daysUntilEvent = getDaysUntilEvent(eventStart);
         return (
           <div 
             data-event
@@ -13,7 +14,7 @@ const EventList = ({ events }) => {
           >
             {isToday(eventStart) && <div className="today">TODAY!</div>}
             <h2>{event.summary}<br />{event.recurrence && (
-              <small>{capitalizeFirstLetter(event.humanRecurrence)}
+              <small>{capitalizeFirstLetter(event.humanRecurrence)}{daysUntilEvent > 0 && !isToday(eventStart) ? ` ·  In ${daysUntilEvent} days` : ''}
               </small>
             )}</h2>
             <h3>{formatDate(eventStart)}</h3>

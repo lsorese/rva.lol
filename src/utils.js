@@ -15,6 +15,14 @@ export function isToday(dateString) {
   );
 }
 
+export function getDaysUntilEvent(dateString) {
+  const eventDate = new Date(dateString);
+  const today = new Date();
+  const timeDifference = eventDate - today;
+  const daysUntilEvent = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+  return daysUntilEvent >= 0 ? daysUntilEvent : 0; 
+}
+
 // String-related utilities
 export function decodeHtml(html) {
   return he.decode(html);
