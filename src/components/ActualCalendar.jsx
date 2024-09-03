@@ -26,7 +26,19 @@ const Flyout = ({ event, onClose }) => {
 
   useEffect(() => {
     document.body.style.overflow = event ? 'hidden' : 'unset';
-  }, [event]);
+
+    const handleEscKey = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscKey);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [event, onClose]);
 
   return (
     <>
