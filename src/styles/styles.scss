@@ -302,6 +302,10 @@ li {
 
 .flyout-content {
   padding: 20px;
+  li {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
 }
 
 .close {
