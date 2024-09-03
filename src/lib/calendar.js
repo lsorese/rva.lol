@@ -87,7 +87,7 @@ function processEvent(event, tonight, fourMonthsLater, includeRecurring) {
       start: { dateTime: eventStart.toISOString() },
       end: { dateTime: eventEnd.toISOString() },
       humanRecurrence: event.recurrence ? getHumanReadableRecurrence(event.recurrence) : null,
-      attachments: processAttachments(event.attachments),
+      attachments: await processAttachments(event.attachments), // Await the promise here
       description: targetBlank(event.description),
     });
   }
@@ -119,6 +119,15 @@ async function processAttachments(attachments) {
     const fileUrl = `https://drive.google.com/uc?export=view&id=${attachment.fileId}`;
     const fileName = attachment.title;
     const localPath = path.join(process.cwd(), 'public', 'event-images', fileName);
+
+    // Check if the file already exists
+    if (fs.existsSync(localPath)) {
+      console.log(`File ${fileName} already exists. Skipping download.`);
+      return {
+        ...attachment,
+        localPath: `/event-images/${fileName}`,
+      };
+    }
 
     try {
       const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
