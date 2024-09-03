@@ -1,5 +1,7 @@
 import axios from 'axios';
 import pkg from 'rrule';
+import fs from 'fs';
+import path from 'path';
 const { RRule } = pkg;
 
 export async function getCalendarEvents(calendarIdEnvVar, includeRecurring = true) {
@@ -47,7 +49,7 @@ function processEvent(event, tonight, fourMonthsLater, includeRecurring) {
           ...event,
           start: { dateTime: nextOccurrence.toISOString() },
           end: { dateTime: new Date(nextOccurrence.getTime() + duration).toISOString() },
-          humanRecurrence: getHumanReadableRecurrence(event.recurrence),
+          humanRecurrence: getHumanReadableRecurrence(event.recurrence)
         };
       });
     } else {
@@ -59,7 +61,7 @@ function processEvent(event, tonight, fourMonthsLater, includeRecurring) {
           ...event,
           start: { dateTime: nextOccurrence.toISOString() },
           end: { dateTime: new Date(nextOccurrence.getTime() + duration).toISOString() },
-          humanRecurrence: getHumanReadableRecurrence(event.recurrence),
+          humanRecurrence: getHumanReadableRecurrence(event.recurrence)
         };
       });
     }
@@ -72,10 +74,40 @@ function processEvent(event, tonight, fourMonthsLater, includeRecurring) {
       start: { dateTime: eventStart.toISOString() },
       end: { dateTime: eventEnd.toISOString() },
       humanRecurrence: event.recurrence ? getHumanReadableRecurrence(event.recurrence) : null,
+      attachments: processAttachments(event.attachments),
     });
   }
 
   return occurrences;
+}
+
+async function processAttachments(attachments) {
+  if (!attachments) return null;
+
+  const processedAttachments = await Promise.all(attachments.map(async attachment => {
+    const fileUrl = `https://drive.google.com/uc?export=view&id=${attachment.fileId}`;
+    const fileName = attachment.title;
+    const localPath = path.join(process.cwd(), 'public', 'event-images', fileName);
+
+    try {
+      const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
+      if (response.data) {
+        fs.writeFileSync(localPath, response.data);
+        return {
+          ...attachment,
+          localPath: `/event-images/${fileName}`,
+        };
+      } else {
+        console.error(`Error downloading attachment ${fileName}: No data received`);
+        return null;
+      }
+    } catch (error) {
+      console.error(`Error downloading attachment ${fileName}:`, error);
+      return null;
+    }
+  }));
+
+  return processedAttachments.filter(attachment => attachment !== null);
 }
 
 function getNextOccurrences(event, fromDate, toDate) {

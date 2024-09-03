@@ -1,4 +1,3 @@
-import React from 'react';
 import { formatDate, isToday, decodeHtml, capitalizeFirstLetter, generateGoogleMapsLink } from '../utils';
 
 const EventList = ({ events }) => {
@@ -18,6 +17,19 @@ const EventList = ({ events }) => {
               </small>
             )}</h2>
             <h3>{formatDate(eventStart)}</h3>
+            {event.attachments && event.attachments.length > 0 && (
+              <details>
+                <summary><strong>Event Poster</strong></summary>
+                {event.attachments.map((attachment, index) => (
+                  <img 
+                    key={index}
+                    src={`/event-images/${attachment.title}`}
+                    alt={attachment.title}
+                    style={{ maxWidth: '100%', height: 'auto' }}
+                  />
+                ))}
+              </details>
+            )}
             
             <p><strong>Info:</strong><br /><span dangerouslySetInnerHTML={{ __html: decodeHtml(event.description || '') }}></span></p>
 
