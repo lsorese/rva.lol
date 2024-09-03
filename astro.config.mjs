@@ -13,8 +13,8 @@ export default defineConfig({
         // A secret random string that you create.
         bypassToken: "hailsatanlordofdarkness66666666666666666",
         // Uncache everything else every 4 minutes
-        maxAge: 240,
-        exclude: [] // Ensure all pages are cached
+        expiration: 240,
+        allowQuery: ['*'], // Allow all query parameters
       },
       headers: [
         {
@@ -22,7 +22,7 @@ export default defineConfig({
           headers: [
             {
               key: "Cache-Control",
-              value: "s-maxage=3600, stale-while-revalidate"
+              value: "s-maxage=240, stale-while-revalidate"
             }
           ]
         },
@@ -31,7 +31,7 @@ export default defineConfig({
           headers: [
             {
               key: "Cache-Control",
-              value: "s-maxage=3600, stale-while-revalidate"
+              value: "s-maxage=240, stale-while-revalidate"
             }
           ]
         }
