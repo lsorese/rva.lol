@@ -87,7 +87,7 @@ function processEvent(event, tonight, fourMonthsLater, includeRecurring) {
       start: { dateTime: eventStart.toISOString() },
       end: { dateTime: eventEnd.toISOString() },
       humanRecurrence: event.recurrence ? getHumanReadableRecurrence(event.recurrence) : null,
-      attachments: await processAttachments(event.attachments), // Await the promise here
+      attachments: processAttachments(event.attachments),
       description: targetBlank(event.description),
     });
   }
