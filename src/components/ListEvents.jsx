@@ -13,8 +13,9 @@ const EventList = ({ events }) => {
             className={isToday(eventStart) ? 'today-event' : ''}
           >
             {isToday(eventStart) && <div className="today">TODAY!</div>}
+            <h6>{daysUntilEvent > 0 && !isToday(eventStart) ? `In ${daysUntilEvent} days` : ''}</h6>
             <h2>{event.summary}<br />{event.recurrence && (
-              <small>{capitalizeFirstLetter(event.humanRecurrence)}{daysUntilEvent > 0 && !isToday(eventStart) ? ` ·  In ${daysUntilEvent} days` : ''}
+              <small>{capitalizeFirstLetter(event.humanRecurrence)}
               </small>
             )}</h2>
             <h3>{formatDate(eventStart)}</h3>
