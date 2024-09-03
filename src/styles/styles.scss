@@ -215,6 +215,11 @@ li {
   border-bottom: 4px dotted #aaa;
   margin-bottom: 40px;
   padding-bottom: 20px;
+
+  li {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
 }
 
 [data-event] .today {
