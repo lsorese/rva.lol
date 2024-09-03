@@ -6,18 +6,20 @@ export async function getCalendarEvents(calendarIdEnvVar, includeRecurring = tru
   const API_KEY = import.meta.env.PUBLIC_API_KEY;
   const CALENDAR_ID = calendarIdEnvVar;
   const now = new Date();
+  const tonight = new Date();
+  tonight.setHours(0, 0, 0, 0); // Set to the start of today
   const fourMonthsLater = new Date(now);
   fourMonthsLater.setMonth(now.getMonth() + 4);
 
   try {
     const response = await axios.get(
-      `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}`
+      `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&timeMin=${tonight.toISOString()}`
     );
 
     const events = response.data.items
       .filter(event => event.status === 'confirmed')
-      .flatMap(event => processEvent(event, now, fourMonthsLater, includeRecurring))
-      .filter(event => isUpcomingEvent(event, now))
+      .flatMap(event => processEvent(event, tonight, fourMonthsLater, includeRecurring))
+      .filter(event => isUpcomingEvent(event, tonight))
       .sort(sortByStartDate);
 
     return events;
@@ -27,18 +29,18 @@ export async function getCalendarEvents(calendarIdEnvVar, includeRecurring = tru
   }
 }
 
-function processEvent(event, now, fourMonthsLater, includeRecurring) {
+function processEvent(event, tonight, fourMonthsLater, includeRecurring) {
   const eventStart = new Date(event.start.dateTime || event.start.date);
   const eventEnd = new Date(event.end.dateTime || event.end.date);
-  const thirtyDaysLater = new Date(now);
-  thirtyDaysLater.setDate(now.getDate() + 30);
+  const thirtyDaysLater = new Date(tonight);
+  thirtyDaysLater.setDate(tonight.getDate() + 30);
 
   let occurrences = [];
 
   if (event.recurrence) {
     if (includeRecurring) {
       // Include all future occurrences within the time range
-      const nextOccurrences = getNextOccurrences(event, now, fourMonthsLater);
+      const nextOccurrences = getNextOccurrences(event, tonight, fourMonthsLater);
       occurrences = nextOccurrences.map(nextOccurrence => {
         const duration = eventEnd - eventStart;
         return {
@@ -50,7 +52,7 @@ function processEvent(event, now, fourMonthsLater, includeRecurring) {
       });
     } else {
       // Include all occurrences within the next 30 days
-      const nextOccurrences = getNextOccurrences(event, now, thirtyDaysLater);
+      const nextOccurrences = getNextOccurrences(event, tonight, thirtyDaysLater);
       occurrences = nextOccurrences.map(nextOccurrence => {
         const duration = eventEnd - eventStart;
         return {
@@ -110,9 +112,9 @@ function getNextOccurrences(event, fromDate, toDate) {
   return occurrences;
 }
 
-function isUpcomingEvent(event, now) {
+function isUpcomingEvent(event, tonight) {
   const eventStart = new Date(event.start.dateTime || event.start.date);
-  return eventStart >= now;
+  return eventStart >= tonight;
 }
 
 function sortByStartDate(a, b) {
