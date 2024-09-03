@@ -40,6 +40,14 @@ const Flyout = ({ event, onClose }) => {
     };
   }, [event, onClose]);
 
+  useEffect(() => {
+    if (event) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [event]);
+
   return (
     <>
       <div
