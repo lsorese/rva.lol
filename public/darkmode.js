@@ -9,15 +9,13 @@ if (typeof document !== 'undefined') {
     }
 
     function initializeTheme() {
-      let prefersDark;
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme) {
         document.documentElement.setAttribute('data-theme', savedTheme);
       } else {
-        prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', 'light'); // Default to light mode
       }
-      updateToggleText(savedTheme || (prefersDark ? 'dark' : 'light'));
+      updateToggleText(savedTheme || 'light'); // Default to light mode
     }
 
     function updateToggleText(theme) {
