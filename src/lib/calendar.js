@@ -4,12 +4,19 @@ import fs from 'fs';
 import path from 'path';
 const { RRule } = pkg;
 
+/**
+ * Fetches calendar events from the Google Calendar API.
+ * 
+ * @param {string} calendarIdEnvVar - The calendar ID environment variable.
+ * @param {boolean} [includeRecurring=true] - Whether to include recurring events.
+ * @returns {Promise<Array>} - A promise that resolves to an array of calendar events.
+ */
 export async function getCalendarEvents(calendarIdEnvVar, includeRecurring = true) {
   const API_KEY = import.meta.env.PUBLIC_API_KEY;
   const CALENDAR_ID = calendarIdEnvVar;
   const now = new Date();
   const tonight = new Date();
-  tonight.setHours(0, 0, 0, 0); // Set to the start of today
+  tonight.setHours(0, 0, 0, 0);
   const fourMonthsLater = new Date(now);
   fourMonthsLater.setMonth(now.getMonth() + 4);
 
@@ -31,6 +38,15 @@ export async function getCalendarEvents(calendarIdEnvVar, includeRecurring = tru
   }
 }
 
+/**
+ * Processes a calendar event and generates its occurrences.
+ * 
+ * @param {Object} event - The calendar event object.
+ * @param {Date} tonight - The start of today.
+ * @param {Date} fourMonthsLater - The date four months from now.
+ * @param {boolean} includeRecurring - Whether to include recurring events.
+ * @returns {Array} - An array of processed event occurrences.
+ */
 function processEvent(event, tonight, fourMonthsLater, includeRecurring) {
   const eventStart = new Date(event.start.dateTime || event.start.date);
   const eventEnd = new Date(event.end.dateTime || event.end.date);
@@ -41,7 +57,6 @@ function processEvent(event, tonight, fourMonthsLater, includeRecurring) {
 
   if (event.recurrence) {
     if (includeRecurring) {
-      // Include all future occurrences within the time range
       const nextOccurrences = getNextOccurrences(event, tonight, fourMonthsLater);
       occurrences = nextOccurrences.map(nextOccurrence => {
         const duration = eventEnd - eventStart;
@@ -53,7 +68,6 @@ function processEvent(event, tonight, fourMonthsLater, includeRecurring) {
         };
       });
     } else {
-      // Include all occurrences within the next 30 days
       const nextOccurrences = getNextOccurrences(event, tonight, thirtyDaysLater);
       occurrences = nextOccurrences.map(nextOccurrence => {
         const duration = eventEnd - eventStart;
@@ -67,7 +81,6 @@ function processEvent(event, tonight, fourMonthsLater, includeRecurring) {
     }
   }
 
-  // Include the original event if it's not a duplicate
   if (!event.recurrence || !isDuplicate(event, occurrences)) {
     occurrences.push({
       ...event,
@@ -75,12 +88,30 @@ function processEvent(event, tonight, fourMonthsLater, includeRecurring) {
       end: { dateTime: eventEnd.toISOString() },
       humanRecurrence: event.recurrence ? getHumanReadableRecurrence(event.recurrence) : null,
       attachments: processAttachments(event.attachments),
+      description: targetBlank(event.description),
     });
   }
 
   return occurrences;
 }
 
+/**
+ * Adds target="_blank" to all <a> tags in the description.
+ * 
+ * @param {string} description - The event description.
+ * @returns {string} - The modified description with target="_blank" added.
+ */
+function targetBlank(description) {
+  if (!description) return description;
+  return description.replace(/<a /g, '<a target="_blank" ');
+}
+
+/**
+ * Processes event attachments and downloads them.
+ * 
+ * @param {Array} attachments - The array of attachment objects.
+ * @returns {Promise<Array>} - A promise that resolves to an array of processed attachments.
+ */
 async function processAttachments(attachments) {
   if (!attachments) return null;
 
@@ -110,6 +141,14 @@ async function processAttachments(attachments) {
   return processedAttachments.filter(attachment => attachment !== null);
 }
 
+/**
+ * Gets the next occurrences of a recurring event within a date range.
+ * 
+ * @param {Object} event - The calendar event object.
+ * @param {Date} fromDate - The start date for the occurrences.
+ * @param {Date} toDate - The end date for the occurrences.
+ * @returns {Array} - An array of occurrence dates.
+ */
 function getNextOccurrences(event, fromDate, toDate) {
   if (!event.recurrence) return [];
 
@@ -118,24 +157,19 @@ function getNextOccurrences(event, fromDate, toDate) {
 
   for (const rruleString of event.recurrence) {
     const rule = RRule.fromString(rruleString.replace('RRULE:', ''));
-
-    // Generate recurrence dates between fromDate and toDate
     const nextDates = rule.between(fromDate, toDate, true).filter(date => date >= fromDate);
 
     occurrences = occurrences.concat(
       nextDates
-        .filter(date => date >= originalStart)  // Ensure no occurrence is before the original event's start date
+        .filter(date => date >= originalStart)
         .map(date => {
           const occurrence = new Date(date);
-
-          // Set the time of day to match the original event's start time
           occurrence.setHours(
             originalStart.getHours(),
             originalStart.getMinutes(),
             originalStart.getSeconds(),
             originalStart.getMilliseconds()
           );
-
           return occurrence;
         })
     );
@@ -144,17 +178,37 @@ function getNextOccurrences(event, fromDate, toDate) {
   return occurrences;
 }
 
+/**
+ * Checks if an event is upcoming based on the current date.
+ * 
+ * @param {Object} event - The calendar event object.
+ * @param {Date} tonight - The start of today.
+ * @returns {boolean} - True if the event is upcoming, false otherwise.
+ */
 function isUpcomingEvent(event, tonight) {
   const eventStart = new Date(event.start.dateTime || event.start.date);
   return eventStart >= tonight;
 }
 
+/**
+ * Sorts events by their start date.
+ * 
+ * @param {Object} a - The first event to compare.
+ * @param {Object} b - The second event to compare.
+ * @returns {number} - A negative number if a < b, a positive number if a > b, or 0 if they are equal.
+ */
 function sortByStartDate(a, b) {
   const dateA = new Date(a.start.dateTime || a.start.date);
   const dateB = new Date(b.start.dateTime || b.start.date);
   return dateA - dateB;
 }
 
+/**
+ * Converts a recurrence rule into a human-readable format.
+ * 
+ * @param {Array} recurrence - The recurrence rules.
+ * @returns {string|null} - A human-readable string or null if no rules are provided.
+ */
 function getHumanReadableRecurrence(recurrence) {
   if (!recurrence || recurrence.length === 0) return null;
   try {
@@ -166,6 +220,13 @@ function getHumanReadableRecurrence(recurrence) {
   }
 }
 
+/**
+ * Checks if an event is a duplicate of any occurrences.
+ * 
+ * @param {Object} event - The calendar event object.
+ * @param {Array} occurrences - The array of occurrences to check against.
+ * @returns {boolean} - True if the event is a duplicate, false otherwise.
+ */
 function isDuplicate(event, occurrences) {
   const eventStart = new Date(event.start.dateTime || event.start.date);
   const eventTitle = event.summary;
