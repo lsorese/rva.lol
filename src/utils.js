@@ -14,13 +14,19 @@ export function isToday(dateString) {
     eventDate.toDateString() === today.toDateString()
   );
 }
-
 export function getDaysUntilEvent(dateString) {
   const eventDate = new Date(dateString);
   const today = new Date();
+  
+  // Check if the event is today
+  if (eventDate.toDateString() === today.toDateString()) {
+    return 0;
+  }
+
   const timeDifference = eventDate - today;
   const daysUntilEvent = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-  return daysUntilEvent >= 0 ? daysUntilEvent : 0; 
+  
+  return daysUntilEvent > 1 ? `In ${daysUntilEvent} Days` : `In ${daysUntilEvent} Day`;
 }
 
 // String-related utilities
