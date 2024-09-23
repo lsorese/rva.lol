@@ -24,11 +24,15 @@ export function getDaysUntilEvent(dateString) {
   }
 
   const timeDifference = eventDate - today;
-  const daysUntilEvent = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+  const daysUntilEvent = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  const hoursUntilEvent = Math.ceil(timeDifference / (1000 * 60 * 60));
   
-  return daysUntilEvent > 1 ? `In ${daysUntilEvent} Days` : `In ${daysUntilEvent} Day`;
+  if (daysUntilEvent < 2) {
+    return `In ${hoursUntilEvent} Hours`;
+  } else {
+    return daysUntilEvent > 1 ? `In ${daysUntilEvent} Days` : `In ${daysUntilEvent} Day`;
+  }
 }
-
 // String-related utilities
 export function decodeHtml(html) {
   return he.decode(html);
