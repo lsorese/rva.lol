@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
     site: 'https://rva.lol',
-    output: "server",
+    output: 'server',
     integrations: [mdx(), react(), sitemap()],
     adapter: vercel({
       isr: {
@@ -35,6 +35,7 @@ export default defineConfig({
             }
           ]
         }
-      ]
+      ],
+      webAnalytics: { enabled: true }
     })
   });
