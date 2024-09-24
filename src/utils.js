@@ -29,7 +29,7 @@ export function getDaysUntilEvent(dateString) {
   const hoursUntilEvent = Math.ceil(timeDifference / (1000 * 60 * 60));
   const daysUntilEvent = Math.floor(hoursUntilEvent / 24);
 
-  if (hoursUntilEvent < 48) {
+  if (hoursUntilEvent < 28) {
     return `In ${hoursUntilEvent} Hours`;
   } else {
     return daysUntilEvent > 1 ? `In ${daysUntilEvent} Days` : `In ${daysUntilEvent} Day`;
