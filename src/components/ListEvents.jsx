@@ -9,6 +9,7 @@ const EventList = ({ events }) => {
         return (
           <div 
             data-event
+            data-event-time={eventStart}
             key={event.id} 
             className={isToday(eventStart) ? 'today-event' : ''}
           >
