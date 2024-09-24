@@ -14,30 +14,28 @@ export function formatDate(dateString) {
 
 export function isToday(dateString) {
   const eventDate = new Date(dateString);
-  const today = new Date();
-  return (
-    eventDate.toDateString() === today.toDateString()
-  );
+  const now = new Date();
+  const timeDifference = eventDate - now;
+  const hoursUntilEvent = timeDifference / (1000 * 60 * 60);
+
+  return hoursUntilEvent <= 24 && hoursUntilEvent >= 0;
 }
+
 export function getDaysUntilEvent(dateString) {
   const eventDate = new Date(dateString);
-  const today = new Date();
-  
-  // Check if the event is today
-  if (eventDate.toDateString() === today.toDateString()) {
-    return 0;
-  }
+  const now = new Date();
 
-  const timeDifference = eventDate - today;
-  const daysUntilEvent = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  const timeDifference = eventDate - now;
   const hoursUntilEvent = Math.ceil(timeDifference / (1000 * 60 * 60));
-  
-  if (daysUntilEvent < 2) {
+  const daysUntilEvent = Math.floor(hoursUntilEvent / 24);
+
+  if (hoursUntilEvent < 48) {
     return `In ${hoursUntilEvent} Hours`;
   } else {
     return daysUntilEvent > 1 ? `In ${daysUntilEvent} Days` : `In ${daysUntilEvent} Day`;
   }
 }
+
 // String-related utilities
 export function decodeHtml(html) {
   return he.decode(html);
