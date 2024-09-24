@@ -1,5 +1,10 @@
 import he from 'he';
 
+export function getTimezone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+
 // Date-related utilities
 export function formatDate(dateString) {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
