@@ -25,7 +25,10 @@ const superFuckingRad = fuckingRad();
 
 <!DOCTYPE html>
 <html lang="en">
-  <head data-timezone={getTimezone()}>
+  <head 
+    data-current-time={new Date().toISOString()}
+    data-timezone={getTimezone()}
+  >
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>rva.lol | {siteTitle}</title>
