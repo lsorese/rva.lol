@@ -21,9 +21,9 @@ export async function getCalendarEvents(calendarIdEnvVar, includeRecurring = tru
   fourMonthsLater.setMonth(now.getMonth() + 4);
 
   try {
-    const response = await axios.get(
-      `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&timeMin=${tonight.toISOString()}`
-    );
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&timeMin=${tonight.toISOString()}&timeZone=UTC`;
+    console.log('Fetching events from URL:', url);
+    const response = await axios.get(url);
 
     const events = response.data.items
       .filter(event => event.status === 'confirmed')
