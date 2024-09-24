@@ -12,7 +12,7 @@ const EventList = ({ events }) => {
             key={event.id} 
             className={isToday(eventStart) ? 'today-event' : ''}
           >
-            {isToday(eventStart) && <div className="today">TODAY!</div>}
+            {isToday(eventStart) && <div className="today">SOON!</div>}
             <h6>{daysUntilEvent != 0 && !isToday(eventStart) ? `${daysUntilEvent}` : ''}</h6>
             <h2>{event.summary}<br />{event.recurrence && (
               <small>{capitalizeFirstLetter(event.humanRecurrence)}
